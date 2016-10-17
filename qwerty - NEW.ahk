@@ -55,6 +55,8 @@ space & x::
 space & y::
 space & z::
 
+$!b::
+$!d::
 $!f::
 $!v::
 $!w::
@@ -110,6 +112,23 @@ quit()
 	global is_pre_spc = 0
 	Return
 }
+
+move_word(direction) {
+if(direction==1)
+	send,^{right}
+else 	
+	send,^{left}
+	global is_pre_spc = 0
+	Return
+}
+
+delete_word() {
+
+	send,^+{right}
+	Send {Del}
+	global is_pre_spc = 0
+	Return
+}
 delete_char() {
 	Send {Del}
 	global is_pre_spc = 0
@@ -127,7 +146,7 @@ key_combo_h:
  Return
  
 key_combo_u:
-  If ( is_pre_x) 
+If ( is_pre_x) 
   {
     undo()
     settimer,removetooltip,500
@@ -138,8 +157,10 @@ key_combo_u:
   Else
     fallbackToDefault()
  Return
+
 key_combo_s:
-  If ( is_pre_x) 
+
+If ( is_pre_x) 
   {
     send ^s
     settimer,removetooltip3,10
@@ -151,6 +172,19 @@ key_combo_s:
     fallbackToDefault()
  Return
 
+key_combo_A_b:
+	move_word(-1)
+	Return
+	
+key_combo_A_f:
+	move_word(1)
+	Return
+	
+key_combo_A_d:
+
+	delete_word()
+	Return
+	
 key_combo_C_d:
 	delete_char()
 	Return
@@ -168,7 +202,7 @@ key_combo_C_g:
 		SetTimer,removetooltip3,-10
 		quit()
 	}
-  Return
+Return
   
 key_combo_C_x:
   ; If is_in_an_emacs_window()
@@ -181,7 +215,7 @@ key_combo_C_x:
 		ypos+=15 
 		tooltip,X= %is_pre_x%,%xpos%,%ypos%,3
 	}
-  Return
+Return
   
 space_to_ctrl(HK)
 {
@@ -193,8 +227,6 @@ space_to_ctrl(HK)
 	return HK
 }
 
-
-
 removetooltip3:
 	settimer,removetooltip3,off
 	tooltip,,,,3
@@ -205,12 +237,10 @@ removetooltip:
 return
 
 space & 9::
-
 	run, "C:\cbn_gits\AHK\run python.py"
-	
 	return
+	
 Space & 5::
-
 	send,{lbutton}
 return
 
@@ -236,11 +266,11 @@ Space & 7::	; na
 return
 
 
-!u::
+RALT & x::
   winclose, A
 
 return
-!i::
+RALT & i::
   Winmaximize,A
   return
 

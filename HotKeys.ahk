@@ -1159,12 +1159,12 @@ return
 
 ^+f11::
 
-run, "C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe" "C:\Users\cibin\ca_cabling\depot.prod.corduroy\corduroy\visualizer\components.py" -n
+run, "C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe" "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\corduroy\visualizer\components.py" -n
 
 return
 
 ^+f12::
-run, "C:\Users\cibin\ca_cabling\depot.prod.corduroy\packages\Scripts\python.exe" "C:\Users\cibin\ca_cabling\depot.prod.corduroy\configadvisor.py"
+run, "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\packages\Scripts\python.exe" "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\configadvisor.py"
 
 return
 ^F11::
