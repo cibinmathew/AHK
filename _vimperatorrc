@@ -1,0 +1,95 @@
+"3.14.0 ( created: 2016/06/07 23:58:16 )
+
+nnoremap ga g0
+nnoremap l gt
+" left
+noremap J h 
+" right
+noremap K l 
+nnoremap h gT
+noremap j 5j
+noremap k 5k
+nnoremap d <c-f>
+noremap d <c-f>
+nnoremap e <c-b>
+noremap e <c-b>
+noremap a gg
+noremap s d
+cmap <Up> <S-Tab>
+cmap <Down> <Tab>
+
+set tabnumbers
+
+" https://gist.github.com/igal/329662
+" Load configuration file into current browser, useful for updating after editing this file.
+command! sourcerc :source ~/_vimperatorrc
+
+" source! "C:\\Users\\cibin\\_vimperatorrc.local"
+
+" vim: set ft=vimperator:
+
+" How can I prevent d on the last tab from closing the window?
+:set! browser.tabs.closeWindowWithLastTab=false
+
+" http://superuser.com/questions/521062/how-to-change-characters-used-for-link-hints-in-firefox-vimperator#comment648908_536450
+" :set hintchars=hjklasdfgyuiopqwertnmzxcvb
+:set hintchars=sfdjkla;hgie
+"iehg
+
+" http://superuser.com/questions/230741/how-to-make-vimperators-numbered-links-bigger-hints
+:highlight Hint font-size:100%;color:black;background-color:#cccc00;padding:1px;padding-left:3px;padding-right:3px;
+
+
+" http://5digits.org/pentadactyl/faq#faq-fork
+" How can I display my hints in upper case but type them in lower case?   
+" If you use alphabetic characters for your 'hintkeys' and would like to
+" be able to type them in lower case but still have the hints displayed
+"in upper case, use:
+:highlight -a Hint text-transform: uppercase;
+
+"How can I hide the hint text for input and image hints?
+"If you'd only like to show the numbered portion of hints, you can do so with:
+":highlight Hint::after content: attr(number) !important;
+
+:set cpt=l
+
+
+" Make bar yellow when focused.
+" From: http://www.reddit.com/r/linux/comments/99d55/i_could_use_a_little_vimperator_help_also/
+
+javascript <<EOF
+    (function() {
+        var inputElement = document.getElementById('liberator-commandline-command');
+        function swapBGColor(event) {
+            inputElement.style.backgroundColor = event.type == "focus" ? "yellow" : "";
+        }
+        inputElement.addEventListener('focus', swapBGColor, false);
+        inputElement.addEventListener('blur', swapBGColor, false);
+    })();
+EOF
+
+
+
+"var inputElement = document.getElementById('liberator-commandline-command').innerHTML;
+"javascript <<EOF
+"    (function() {
+"        var inputElement = document.getElementById('liberator-commandline-command');
+"		
+ "       function swapBGColor(event) {
+  "          inputElement.style.backgroundColor = event.type == "focus" ? "yellow" : "";
+   "     }
+    "   inputElement.addEventListener('focus', swapBGColor, false);
+     "   inputElement.addEventListener('blur', swapBGColor, false);
+"    })();
+" EOF
+
+
+" copy page title to the clipboard (with ALT+y)
+" http://www.mozdev.org/pipermail/vimperator/2008-October/002546.html
+:map <silent> <A-y> :js util.copyToClipboard(content.document.title, true)<cr>
+
+" Ctrl-a
+"inoremap <C-a> <C-Home><C-S-End>
+inoremap <C-a> <Ins><C-a><Ins>
+"inoremap <C-a> 
+"cnoremap <C-a>
