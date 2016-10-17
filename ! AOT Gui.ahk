@@ -268,7 +268,7 @@ Return
 
 capture_AOT_screenshot:
 	; Runwait, %comspec% /c ""C:\cbn_gits\opus\apps\nircmd\nircmd.exe" cmdwait 100 savescreenshot "%AOT_screenshot_img_File%" ,,Hide
-	Runwait, %comspec% /c ""C:\Users\cibin\Downloads\boxcutter-1.5\boxcutter-1.5\boxcutter.exe" -f "%AOT_screenshot_img_File%" ,,Hide
+	Runwait, %comspec% /c ""C:\users\%A_UserName%\Downloads\boxcutter-1.5\boxcutter-1.5\boxcutter.exe" -f "%AOT_screenshot_img_File%" ,,Hide
 	tooltip,saved
 	sleep,500
 	tooltip
