@@ -985,14 +985,34 @@ SetBatchLines, -1
     {
         Loop, %all%
         {
-            WinGet, PID, PID, % "ahk_id " all%A_Index%
-            Output .= PID "`n"        
+            WinGet, PID, PID, % "ahk_id " all%A_Index%  
+            Output .= PID "`n"       
         }
         Sort, Output, U N ;numeric order and remove duplicates
     }
 DetectHiddenWindows, %O_DHW% ;back to original state
 SetBatchLines, %O_BL% ;back to original state
-    Sort, Output, U ;remove duplicates
-    Return Output
+    Sort, Output, U ;remove duplicates 
+    Return Output 
 }
 
+; /cygdrive/c/cbn_gits/AHK
+linux_to_windows(fullfilepath)
+{
+	; remove cygdrive reference
+	fullfilepath:=regexreplace(fullfilepath,"^\s*/cygdrive/(.)/(.*)","$1:\\$2")
+	
+	fullfilepath:=regexreplace(fullfilepath,"^\s*/?(.)/(.*)","$1:\\$2")
+	stringreplace,fullfilepath,fullfilepath,/,\,all
+	return fullfilepath
+}
+clean_filepath_string(fullfilepath)
+{
+	reg=im)(*ANYCRLF)^[\s\{\("'=;:\}\)`%]*$
+	fullfilepath:=regexreplace(fullfilepath,reg)
+	reg=((^[\s\{\("'=;:`%]*)|([\s\}\)'"=;`%]*$))
+	stringreplace,fullfilepath,fullfilepath,\\,\,all
+	fullfilepath:=regexreplace(fullfilepath,reg)
+	fullfilepath:= RegExReplace(fullfilepath,  "m)^(?:[\t ]*(?:\r?\n|\r))+", "")
+return fullfilepath
+}
