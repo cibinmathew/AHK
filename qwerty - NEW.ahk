@@ -60,6 +60,8 @@ $!d::
 $!f::
 $!v::
 $!w::
+$!.::
+$!,::
 ;^b::
 s::
 h::
@@ -140,6 +142,9 @@ key_combo_h:
   {
     send ^a
     is_pre_x = 0
+	
+    settimer,removetooltip3,10
+    settimer,removetooltip,500
   }
   Else
     fallbackToDefault()
