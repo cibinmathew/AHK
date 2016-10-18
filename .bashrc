@@ -5,7 +5,16 @@
 #########
 # Aliases
 #########
+echo "os: $OS"
+if [ "$OS" == "Windows_NT" ]; then
+	Universal_home=$(cygpath -H)
+	echo "$Universal_home"
+else
+	echo "linux machine"
+fi
 
+Universal_home="$Universal_home/$USERNAME"
+echo "$Universal_home"
 
 function xpl() {
 	#alias vl='vim $(fc -s)' # will open the output of last command in vi
@@ -130,11 +139,11 @@ else
 function myindex() { 
 if [ -z "$1" ]; then
     # display usage if no parameters given
-    echo "Usage: cibin index all files to /cygdrive/c/Users/cibin/Downloads/all_files.txt"
-	lfind /cygdrive -iname "*" > /cygdrive/c/Users/cibin/Downloads/all_files.txt
+    echo "Usage: cibin index all files to $Universal_home/Downloads/all_files.txt"
+	lfind /cygdrive -iname "*" > "$Universal_home/Downloads/all_files.txt"
  #else
 
- #grep -PrnIi "$1" --color=auto /cygdrive/c/Users/cibin/Downloads/text/* /cygdrive/c/Users/cibin/Desktop/Projects/python_scripts; 
+ #grep -PrnIi "$1" --color=auto $Universal_home/Downloads/text/* $Universal_home/Desktop/Projects/python_scripts; 
  fi
  }
 
@@ -148,15 +157,15 @@ if [ -z "$1" ]; then
 	for arg in $*; do		
 		search=$search\(?=.*$arg[^\\/]*$\)
 		done	
-	grep -PrIi "$search" --color=auto /cygdrive/c/Users/cibin/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///"  
+	grep -PrIi "$search" --color=auto "$Universal_home/Downloads/all_files.txt" |  sed -e "s/\\/cygdrive\\///"  
 	
 fi
  }
 #switch case example
 	#case $# in
-	#2)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)" --color=auto /cygdrive/c/Users/cibin/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
-	#3)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)(?=.*$3[^/]*$)" --color=auto /cygdrive/c/Users/cibin/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
-	#4)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)(?=.*$3[^/]*$)(?=.*$4[^/]*$)" --color=auto /cygdrive/c/Users/cibin/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
+	#2)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)" --color=auto $Universal_home/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
+	#3)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)(?=.*$3[^/]*$)" --color=auto $Universal_home/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
+	#4)  grep -PrIi "(?=.*$1[^/]*$)(?=.*$2[^/]*$)(?=.*$3[^/]*$)(?=.*$4[^/]*$)" --color=auto $Universal_home/Downloads/all_files.txt |  sed -e "s/\\/cygdrive\\///";;
 	#*)  echo "too many arguments"  ;; 
 	#esac
 
