@@ -40,12 +40,21 @@ encode_key_combo(HK)
 		StringtrimLeft, HK, HK, 1
 		HK = S-%HK%
 	}
-	
+	StringReplace,HK,HK,.,Dot
+	StringReplace,HK,HK,`,,Comma
+	return HK
+}
+
+decode_key_combo(HK)
+{
+	StringReplace,HK,HK,Dot,.
+	StringReplace,HK,HK,,Comma`,
 	return HK
 }
 
 send_key(HK)
 {
+	HK := decode_key_combo(HK)
 	if regexmatch(HK,"^C-.")
 	{
 		;tooltip,%HK%
@@ -84,7 +93,7 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 	emacs_mapping_C_e={End}
 	emacs_mapping_C_f={Right}
 	emacs_mapping_C_g=key_combo_C_g
-	emacs_mapping_C_h=C-h
+	emacs_mapping_C_h={Backspace}
 	emacs_mapping_C_i=C-i
 	emacs_mapping_C_j=C-j
 	emacs_mapping_C_k=C-k
@@ -108,6 +117,8 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 	emacs_mapping_A_f=key_combo_A_f
 	emacs_mapping_A_w=C-c
 	emacs_mapping_A_v={PgUp}
+	emacs_mapping_A_Dot=^{End}
+	emacs_mapping_A_Comma=^{Home}
 	
 	key_combos_map_to_function=C-x,C-g,C-d,A-f,A-d,A-b
 	if HK in %key_combos_map_to_function%
@@ -135,7 +146,7 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 
 is_in_an_emacs_window()
 {
-	If WinActive("ahk_exe eclipse.exe") Or WinActive("ahk_exe emacs.exe")  Or WinActive("ahk_exe sublime_text.exe") ; Or WinActive("ahk_exe firefox.exe")
+	If WinActive("ahk_exe eclipse.exe") Or WinActive("ahk_exe javaw.exe")  Or WinActive("ahk_exe emacs.exe")  Or WinActive("ahk_exe sublime_text.exe") ; Or WinActive("ahk_exe firefox.exe")
 		return true
 	else
 		return false
