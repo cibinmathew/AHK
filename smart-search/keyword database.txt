@@ -1,0 +1,19 @@
+json_to_csv
+csv_escape
+xml_to_csv
+json_to_xml
+xml2json
+json2xml
+json_to_xml_ArrayAsTags
+pretty_print_xml
+pretty_print_json
+csv_to_json # to do
+cmd
+csv column 4,5
+
+text formatting,xml,xml to json,xml to json,description not available,na,
+text formatting,csv,csv escape,escape csv special chars,description not available,na,
+
+cmd,na,cmd,run cmd,run cmd commands here,no output
+calc,na,lines
+

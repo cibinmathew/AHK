@@ -1,0 +1,6 @@
+text formatting,xml,xml to csv,xml to comma separated value,description not available,na,
+text formatting,xml,xml to json,xml to json,description not available,na,
+text formatting,csv,csv escape,escape csv special chars,description not available,na,
+
+cmd,na,cmd,run cmd,run cmd commands here,no output
+calc,na,lines
