@@ -1,0 +1,13 @@
+default
+avi,mp4,vob,mpg,mpeg,3gp,swf,wmv,flv,mkv
+mp3,wav,aac
+txt,java,c,ahk,ini
+csv
+py,pyc
+jpg,jpeg,png,bmp,gif
+pdf
+doc,docx
+ppt
+xls
+url,htm,html
+xml

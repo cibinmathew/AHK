@@ -1,0 +1,13 @@
+C:\Program Files (x86)\Notepad++\notepad++.exe,C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe,C:\Program Files\Sublime Text 3\sublime_text.exe
+C:\Program Files (x86)\The KMPlayer\KMPlayer.exe,C:\Program Files (x86)\VideoLAN\VLC\vlc.exe
+C:\Program Files (x86)\The KMPlayer\KMPlayer.exe,C:\Program Files (x86)\VideoLAN\VLC\vlc.exe
+C:\Program Files (x86)\Notepad++\notepad++.exe,C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe,C:\Program Files\Sublime Text 3\sublime_text.exe
+C:\Program Files\Sublime Text 3\sublime_text.exe,C:\Program Files (x86)\Notepad++\notepad++.exe,C:\Program Files\Microsoft Office\Office15\EXCEL.EXE
+C:\Program Files (x86)\Notepad++\notepad++.exe,C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe,C:\Program Files\Sublime Text 3\sublime_text.exe
+C:\Windows\system32\mspaint.exe,F:\cbn\opus\apps\fotografix-2.0.0\Fotografix.exe
+F:\cbn\! SPECIAL APPS\FoxitReaderPortable\App\Foxit Reader\Foxit Reader.exe
+C:\Program Files\Microsoft Office\Office15\WINWORD.EXE,H:\Downloads\PROGRAMS\LibreOfficePortable\LibreOfficePortable.exe
+C:\Program Files\Microsoft Office\Office15\POWERPNT.EXE,H:\Downloads\PROGRAMS\LibreOfficePortable\LibreOfficePortable.exe
+H:\Downloads\PROGRAMS\LibreOfficePortable\LibreOfficePortable.exe
+C:\Program Files (x86)\Mozilla Firefox\firefox.exe,C:\Program Files (x86)\Google\Chrome\Application\chrome.exe,C:\Program Files (x86)\Notepad++\notepad++.exe,C:\Program Files\Sublime Text 3\sublime_text.exe
+C:\Program Files (x86)\Mozilla Firefox\firefox.exe,C:\Program Files (x86)\Google\Chrome\Application\chrome.exe,C:\Program Files (x86)\Notepad++\notepad++.exe,C:\Program Files\Sublime Text 3\sublime_text.exe
