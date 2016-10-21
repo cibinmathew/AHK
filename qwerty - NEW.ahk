@@ -50,6 +50,7 @@ space & r::
 space & s::
 space & t::
 space & u::
+space & v::
 space & w::
 space & x::
 space & y::
@@ -271,7 +272,8 @@ Space & 7::	; na
 return
 
 
-RALT & x::
+Ralt & x::
+if (A_PriorHotKey = A_thisHotKey AND A_TimeSincePriorHotkey < 300)
   winclose, A
 
 return
