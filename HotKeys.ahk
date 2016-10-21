@@ -1,3 +1,6 @@
+; http://www.cibinmathew.com
+; github.com/cibinmathew
+
 SplitPath, A_ScriptDir , , , , , A_Script_Drive
 Menu, Tray, Icon, Shell32.dll,13
 
@@ -1158,8 +1161,8 @@ return
 
 
 ^+f11::
-
-run, "C:\cbn_gits\emacs\emacs-24.5-bin-i686-mingw32\bin\emacsclient.exe" "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\corduroy\visualizer\components.py" -n
+iniread,f_path,all_settings.ini,paths,emacs
+run, "%f_path%" "C:\Users\cibin\Downloads\clear these doubts.txt" -n
 
 return
 
