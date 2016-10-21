@@ -48,7 +48,7 @@ encode_key_combo(HK)
 decode_key_combo(HK)
 {
 	StringReplace,HK,HK,Dot,.
-	StringReplace,HK,HK,,Comma`,
+	StringReplace,HK,HK,Comma`,
 	return HK
 }
 
@@ -163,5 +163,8 @@ trigger_if_triggered_by_emacs_script_else_proceed(key_to_check)
 		return 1
 	}
 	else
+	{
+		; msgbox
 		return 0
+	}
 }
