@@ -2,12 +2,18 @@
 
 # AHK
 The autohotkey scripts include 
+
 clipboard manager
 editing shortcuts
+
 file searching utility
+
 hotkey to run any kind of file
+
 smart result on selected text
+
 emacs style editing anywhere 
+
 smart launcher application
 
 # vimperator/ vrome browser config file
