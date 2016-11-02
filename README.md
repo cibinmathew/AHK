@@ -6,20 +6,21 @@ The autohotkey scripts include
 
 \` runs any kind of file
 
-clipboard manager
+* clipboard manager
 Use Ctrl X-C-V to cycle between previous clipboard entries
-editing shortcuts
 
-file searching utility
+* editing shortcuts
+
+* file searching utility
 F3 to use search as you type file finder in the current folder
 
-smart result on selected text
+* smart result on selected text
 if your selected text is an expression, it shows the result
 
-emacs style editing anywhere 
+* emacs style editing anywhere 
 use your favourite Ctrl-A to Z keys of emacs anywhere
 
-smart launcher application
+* smart launcher application
 
 
 ## vimperator/ vrome browser config file
