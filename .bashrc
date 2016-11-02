@@ -1,7 +1,7 @@
 #www.cibinmathew.com
 #github.com/cibinmathew
 
-
+# to make startup faster; http://stackoverflow.com/questions/28410852/startup-is-really-slow-for-all-cygwin-applications
 #########
 # Aliases
 #########

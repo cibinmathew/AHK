@@ -1,6 +1,14 @@
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
+
+    ; TO DO
+; ========
+; http://ergoemacs.org/emacs/elisp_close_buffer_open_last_closed.html
+
+
+
+
 (setq-default dotspacemacs-configuration-layers '(themes-megapack))
 
 ( defun dotspacemacs/layers ()
@@ -152,7 +160,7 @@
 		dotspacemacs-display-default-layout nil
 		;; If non nil then the last auto saved layouts are resume automatically upon
 		;; start. (default nil)
-		dotspacemacs-auto-resume-layouts nil
+		dotspacemacs-auto-resume-layouts t
 		;; Location where to auto-save files. Possible values are `original' to
 		;; auto-save the file in-place, `cache' to auto-save the file to another
 		;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -279,17 +287,66 @@
 		  (global-linum-mode) ; Show line numbers by default
 		  (setq custom-enabled-themes '(whiteboard))
 		  (setq cursor-type '(bar . 4))
+		(recentf-mode 1) ; keep a list of recently opened files
 		
-		
+(setq initial-major-mode (quote text-mode)) ; default mode
+(defalias 'list-buffers 'ibuffer) ; always use ibuffer
+;; make frequently used commands short
+(defalias 'qrr 'query-replace-regexp)
+(defalias 'lml 'list-matching-lines)
+(defalias 'dml 'delete-matching-lines)
+(defalias 'dnml 'delete-non-matching-lines)
+(defalias 'dtw 'delete-trailing-whitespace)
+(defalias 'sl 'sort-lines)
+(defalias 'rr 'reverse-region)
+(defalias 'rs 'replace-string)
+
+(defalias 'g 'grep)
+(defalias 'gf 'grep-find)
+(defalias 'fd 'find-dired)
+
+(defalias 'rb 'revert-buffer)
+
+(defalias 'sh 'shell)
+(defalias 'fb 'flyspell-buffer)
+(defalias 'sbc 'set-background-color)
+(defalias 'rof 'recentf-open-files)
+(defalias 'lcd 'list-colors-display)
+(defalias 'cc 'calc)
+
+; elisp
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ed 'eval-defun)
+(defalias 'eis 'elisp-index-search)
+(defalias 'lf 'load-file)
+
+; major modes
+(defalias 'hm 'html-mode)
+(defalias 'tm 'text-mode)
+(defalias 'elm 'emacs-lisp-mode)
+(defalias 'om 'org-mode)
+(defalias 'ssm 'shell-script-mode)
+
+; minor modes
+(defalias 'wsm 'whitespace-mode)
+(defalias 'gwsm 'global-whitespace-mode)
+(defalias 'vlm 'visual-line-mode)
+(defalias 'glm 'global-linum-mode)
+; Save the above in file and name it my-alias.el, then put it in your ~/.emacs.d/ directory. Then, in your emacs init file, add:
+; (load "my-alias")
+
+;; Tell emacs where is your personal elisp lib dir
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
 
-; save the place in files
-		
+
+; save the place in files		
 		(require 'saveplace)
 		(setq-default save-place t)
-
+(global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs")))
 (global-set-key [f1] 'shell-other-window) ; shell
-
+(global-set-key (kbd "M-9") 'kill-whole-line)
 		(global-set-key (kbd "C-=") 'text-scale-increase)
 		(global-set-key (kbd "C--") 'text-scale-decrease)
 		(global-set-key (kbd "<f8>") 'xah-run-current-file)
@@ -302,6 +359,66 @@
 
 
 )
+
+(require 'ido) ; part of emacs
+
+(defvar xah-filelist nil "Association list of file/dir paths. Used by `xah-open-file-fast'. Key is a short abbrev string, Value is file path string.")
+
+(setq xah-filelist
+      '(
+        ("3emacs" . "~/.emacs.d/" )
+        ("git" . "~/git/" )
+        ("todo" . "~/todo.org" )
+        ("keys" . "~/git/my_emacs_init/my_keybinding.el" )
+        ("download" . "~/Downloads/" )
+        ("pictures" . "~/Pictures/" )
+        ;; more here
+        ) )
+		
+(defun xah-open-file-fast ()
+  "Prompt to open a file from `xah-filelist'.
+URL `http://ergoemacs.org/emacs/emacs_hotkey_open_file_fast.html'
+Version 2015-04-23"
+
+
+
+; Call xah-open-file-fast, then it will prompt with real-time name completion as you type.
+
+; You should assign it a key. For example, 【F8】, so you can open a file by 【F8 1】, 【F8 2】, etc.
+  (interactive)
+  
+  
+  ; (let ((-abbrevCode
+         ; (ido-completing-read "Open:" (mapcar (lambda (-x) (car -x)) xah-filelist))))
+    ; (find-file (cdr (assoc -abbrevCode xah-filelist))))
+	
+	; OR
+	
+	(let ((j 1) (file (car xah-filelist)))
+(while file
+(let ((name (intern (format "Open:%s" (car file)))))
+(fset name `(lambda () (interactive) (find-file ,(cdr file))))
+(setq file (nth j xah-filelist))
+(or (< j 10) (setq file nil j 0))
+(global-set-key (kbd (format "<f2> %d" j)) name)
+(setq j (1+ j)))))
+	
+	)
+
+
+
+
+(defun xah-new-empty-buffer ()
+  "Open a new empty buffer.
+URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+Version 2016-08-11"
+  (interactive)
+  (let ((-buf (generate-new-buffer "untitled")))
+    (switch-to-buffer -buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)))
+	
+	
 (defun shell-other-window ()
   "Open a `shell' in a new window."
   (interactive)
@@ -372,6 +489,8 @@
 		(setq w32shell-cygwin-bin cygwin-dir))))
 
 
+				  
+				  
 		
 (defun xah-run-current-file ()
 		"Execute the current file.
