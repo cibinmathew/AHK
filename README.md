@@ -1,6 +1,6 @@
 # The Ultimate Keyboard and Mouse shortcuts to make coding easier
 
-# AHK
+## AHK
 The autohotkey scripts include 
 
 
@@ -22,12 +22,12 @@ use your favourite Ctrl-A to Z keys of emacs anywhere
 smart launcher application
 
 
-# vimperator/ vrome browser config file
+## vimperator/ vrome browser config file
 Get your vi/vim style of usage inside the browser. Use gg, G, x, / and all other favourite navigation shortcuts easily in the browser
 
-# bash config file
+## bash config file
 the startup config files with few aliases and important functions.
 
-# emacs
+## emacs
 
 includes emacs plugins
