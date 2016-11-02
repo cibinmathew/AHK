@@ -12,6 +12,8 @@ Menu, Tray, Icon, Shell32.dll,13
 
 #SingleInstance force
 
+
+
 space_hotkey =1
 power_save:=0
 HK_extract_filenames_cycle:=0
@@ -59,9 +61,27 @@ alt_lbutton_A=nil
 
 flag=0
 
+
 ;priority 
 Hotkey, <^Wheeldown, , p1
 Hotkey, <^Wheelup, , p1
+
+
+;; HORSTRINGS
+; #Hotstring EndChars -()[]{}:;'"/\,.?!`n `t
+
+;  sensitive info encoded
+var1:=531441.79*400
+stringleft,var1,var1,9
+:c*:id`;`;::
+Send, %var1%
+return
+
+:c*:cmge`;`;::cibin.mathew@ge.com
+:c*:il`;`;::ikonland@gmail.com
+
+
+
 return
 
 /*

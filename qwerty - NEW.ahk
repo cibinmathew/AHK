@@ -98,7 +98,10 @@ return
 fallbackToDefault() {
 	StringReplace, HK, A_ThisHotkey, <, , All
 	; msgbox,%HK%
+	current:= A_SendLevel 
+	Sendlevel, 1
 	send, %HK%
+	; Sendlevel, %current%
 }
  
 undo() {
