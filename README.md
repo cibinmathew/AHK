@@ -4,7 +4,7 @@
 The autohotkey scripts include 
 
 
-\` runs any kind of file
+* \` runs any kind of file
 
 * clipboard manager
 Use Ctrl X-C-V to cycle between previous clipboard entries
