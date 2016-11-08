@@ -1,14 +1,18 @@
+; http://www.wilkesley.org/~ian/xah/emacs/elisp_next_prev_user_buffer.html
+; http://www.wilkesley.org/~ian/xah/emacs/emacs_stop_cursor_enter_prompt.html
+
+; http://www.wilkesley.org/~ian/xah/misc/ergoemacs_vi_mode.html
+; use single key for switching bufffer use xah function for switch
+
+; lots of good tips
+
+
+; https://github.com/thunderboltsid/vim-configuration/blob/master/vimrc
+; https://github.com/magnars/.emacs.d
+
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
-
-    ; TO DO
-; ========
-; http://ergoemacs.org/emacs/elisp_close_buffer_open_last_closed.html
-
-
-
-
 (setq-default dotspacemacs-configuration-layers '(themes-megapack))
 
 ( defun dotspacemacs/layers ()
@@ -160,7 +164,7 @@
 		dotspacemacs-display-default-layout nil
 		;; If non nil then the last auto saved layouts are resume automatically upon
 		;; start. (default nil)
-		dotspacemacs-auto-resume-layouts t
+		dotspacemacs-auto-resume-layouts nil
 		;; Location where to auto-save files. Possible values are `original' to
 		;; auto-save the file in-place, `cache' to auto-save the file to another
 		;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -287,66 +291,17 @@
 		  (global-linum-mode) ; Show line numbers by default
 		  (setq custom-enabled-themes '(whiteboard))
 		  (setq cursor-type '(bar . 4))
-		(recentf-mode 1) ; keep a list of recently opened files
 		
-(setq initial-major-mode (quote text-mode)) ; default mode
-(defalias 'list-buffers 'ibuffer) ; always use ibuffer
-;; make frequently used commands short
-(defalias 'qrr 'query-replace-regexp)
-(defalias 'lml 'list-matching-lines)
-(defalias 'dml 'delete-matching-lines)
-(defalias 'dnml 'delete-non-matching-lines)
-(defalias 'dtw 'delete-trailing-whitespace)
-(defalias 'sl 'sort-lines)
-(defalias 'rr 'reverse-region)
-(defalias 'rs 'replace-string)
-
-(defalias 'g 'grep)
-(defalias 'gf 'grep-find)
-(defalias 'fd 'find-dired)
-
-(defalias 'rb 'revert-buffer)
-
-(defalias 'sh 'shell)
-(defalias 'fb 'flyspell-buffer)
-(defalias 'sbc 'set-background-color)
-(defalias 'rof 'recentf-open-files)
-(defalias 'lcd 'list-colors-display)
-(defalias 'cc 'calc)
-
-; elisp
-(defalias 'eb 'eval-buffer)
-(defalias 'er 'eval-region)
-(defalias 'ed 'eval-defun)
-(defalias 'eis 'elisp-index-search)
-(defalias 'lf 'load-file)
-
-; major modes
-(defalias 'hm 'html-mode)
-(defalias 'tm 'text-mode)
-(defalias 'elm 'emacs-lisp-mode)
-(defalias 'om 'org-mode)
-(defalias 'ssm 'shell-script-mode)
-
-; minor modes
-(defalias 'wsm 'whitespace-mode)
-(defalias 'gwsm 'global-whitespace-mode)
-(defalias 'vlm 'visual-line-mode)
-(defalias 'glm 'global-linum-mode)
-; Save the above in file and name it my-alias.el, then put it in your ~/.emacs.d/ directory. Then, in your emacs init file, add:
-; (load "my-alias")
-
-;; Tell emacs where is your personal elisp lib dir
-(add-to-list 'load-path "~/.emacs.d/lisp/")
+		
 
 
-
-; save the place in files		
+; save the place in files
+		
 		(require 'saveplace)
 		(setq-default save-place t)
-(global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs")))
+
 (global-set-key [f1] 'shell-other-window) ; shell
-(global-set-key (kbd "M-9") 'kill-whole-line)
+
 		(global-set-key (kbd "C-=") 'text-scale-increase)
 		(global-set-key (kbd "C--") 'text-scale-decrease)
 		(global-set-key (kbd "<f8>") 'xah-run-current-file)
@@ -357,68 +312,51 @@
   ;(require 'w32-msgbox)
     (setq revert-buffer-function 'inform-revert-modified-file)
 
+		(global-set-key (kbd "<mouse-3>") 'nil)
+		(fset 'evil-visual-update-x-selection 'ignore)
+		(setq mouse-drag-copy-region nil)
+		(setq x-select-enable-primary nil)
+		(setq visible-bell 1)
+		(cd "C:\\...\\master\\AHK\\emacs-plugins\\emacs plugins\\el-qrencode-master")
+		(load-file "C:\\...\\master\\AHK\\emacs-plugins\\emacs plugins\\el-qrencode-master\\load.el")
+(electric-pair-mode 1) ; automatically insert right brackets when left one is typed?
+(show-paren-mode 1) ; turn on bracket match highlight
+
+; http://ergoemacs.org/emacs/emacs_make_modern.html
+;; save minibuffer history
+(savehist-mode 1)
+
+(setq backup-by-copying t) ; stop emacs's backup changing the file's creation date of the original file?
+
+;; backup in one place. flat, no tree structure
+; (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+; all backups are placed in one place
+; This will create backup files flat in the given dir, and the backup file names will have “!” characters in place of the directory separator.
+(setq make-backup-file-name-function 'my-backup-file-name)
+
+(desktop-save-mode 1) ; save/restore opened files from last session
+(global-visual-line-mode 1) ; soft line wrap ; 1 for on, 0 for off.
 
 )
 
-(require 'ido) ; part of emacs
 
-(defvar xah-filelist nil "Association list of file/dir paths. Used by `xah-open-file-fast'. Key is a short abbrev string, Value is file path string.")
+;; make backup to a designated dir, mirroring the full path
 
-(setq xah-filelist
-      '(
-        ("3emacs" . "~/.emacs.d/" )
-        ("git" . "~/git/" )
-        ("todo" . "~/todo.org" )
-        ("keys" . "~/git/my_emacs_init/my_keybinding.el" )
-        ("download" . "~/Downloads/" )
-        ("pictures" . "~/Pictures/" )
-        ;; more here
-        ) )
-		
-(defun xah-open-file-fast ()
-  "Prompt to open a file from `xah-filelist'.
-URL `http://ergoemacs.org/emacs/emacs_hotkey_open_file_fast.html'
-Version 2015-04-23"
+(defun my-backup-file-name (fpath)
+  "Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* (
+        (backupRootDir "~/.emacs.d/emacs-backup/")
+        (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, ➢ for example: “C:”
+        (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+        )
+    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+    backupFilePath
+  )
+)
 
 
 
-; Call xah-open-file-fast, then it will prompt with real-time name completion as you type.
-
-; You should assign it a key. For example, 【F8】, so you can open a file by 【F8 1】, 【F8 2】, etc.
-  (interactive)
-  
-  
-  ; (let ((-abbrevCode
-         ; (ido-completing-read "Open:" (mapcar (lambda (-x) (car -x)) xah-filelist))))
-    ; (find-file (cdr (assoc -abbrevCode xah-filelist))))
-	
-	; OR
-	
-	(let ((j 1) (file (car xah-filelist)))
-(while file
-(let ((name (intern (format "Open:%s" (car file)))))
-(fset name `(lambda () (interactive) (find-file ,(cdr file))))
-(setq file (nth j xah-filelist))
-(or (< j 10) (setq file nil j 0))
-(global-set-key (kbd (format "<f2> %d" j)) name)
-(setq j (1+ j)))))
-	
-	)
-
-
-
-
-(defun xah-new-empty-buffer ()
-  "Open a new empty buffer.
-URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
-Version 2016-08-11"
-  (interactive)
-  (let ((-buf (generate-new-buffer "untitled")))
-    (switch-to-buffer -buf)
-    (funcall initial-major-mode)
-    (setq buffer-offer-save t)))
-	
-	
 (defun shell-other-window ()
   "Open a `shell' in a new window."
   (interactive)
@@ -487,11 +425,183 @@ Version 2016-08-11"
 		(when (require 'cygwin-mount nil t)
 		(cygwin-mount-activate)
 		(setq w32shell-cygwin-bin cygwin-dir))))
-
-
-				  
-				  
 		
+(defun cygwin-shell ()
+  "Run cygwin bash in shell mode."
+  (interactive)
+  (let ((explicit-shell-file-name "C:/cygwin64/bin/bash"))
+    (call-interactively 'shell)))
+(defun xah-copy-file-path (&optional *dir-path-only-p)
+  "Copy the current buffer's file path or dired path to `kill-ring'.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+URL `http://ergoemacs.org/emacs/emacs_copy_file_path.html'
+Version 2016-07-17"
+  (interactive "P")
+  (let ((-fpath
+         (if (equal major-mode 'dired-mode)
+             (expand-file-name default-directory)
+           (if (null (buffer-file-name))
+               (user-error "Current buffer is not associated with a file.")
+             (buffer-file-name)))))
+    (kill-new
+     (if (null *dir-path-only-p)
+         (progn
+           (message "File path copied: 「%s」" -fpath)
+           -fpath
+           )
+       (progn
+         (message "Directory path copied: 「%s」" (file-name-directory -fpath))
+         (file-name-directory -fpath))))))
+	
+	
+	(defun xah-open-file-at-cursor ()
+  "Open the file path under cursor.
+If there is text selection, uses the text selection for path.
+If the path starts with “http://”, open the URL in browser.
+Input path can be {relative, full path, URL}.
+Path may have a trailing “:‹n›” that indicates line number. If so, jump to that line number.
+If path does not have a file extension, automatically try with “.el” for elisp files.
+This command is similar to `find-file-at-point' but without prompting for confirmation.
+
+URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
+  (interactive)
+  (
+  ; let ((-path (if (use-region-p)
+                   ; (buffer-substring-no-properties (region-beginning) (region-end))
+                 ; (let (p0 p1 p2)
+                   ; (setq p0 (point))
+                   ; ; chars that are likely to be delimiters of full path, e.g. space, tabs, brakets.
+                   ; (skip-chars-backward "^  \"\t\n`'|()[]{}<>〔〕“”〈〉《》【】〖〗«»‹›·。\\`")
+                   ; (setq p1 (point))
+                   ; (goto-char p0)
+                   ; (skip-chars-forward "^  \"\t\n`'|()[]{}<>〔〕“”〈〉《》【】〖〗«»‹›·。\\'")
+                   ; (setq p2 (point))
+                   ; (goto-char p0)
+                   ; (buffer-substring-no-properties p1 p2)))))
+	let ((-path  (setq -path
+      (buffer-substring-no-properties
+       (line-beginning-position)
+       (line-end-position)))
+       )	)	 
+				   
+			(message "path is")
+			(message -path)
+	; if text is a url		
+    ; (if (string-match-p "\\`https?://" -path)
+        ; (browse-url -path)
+	; (pcase "yyy" 		
+		; ("nill" (message "hi" ))
+		; ("noo" (message "no" ))
+		; ("yyy" (message "hellllll" ))
+	; )
+
+
+(setq -path (replace-regexp-in-string "/cygdrive/\\(.\\)" "\\1:" -path))
+		(if (file-exists-p -path)
+                (find-file -path)
+      (progn ; not starting “http://”
+	  
+        (if (string-match "^\\`\\([^:]+?\\):\\([0-9]*\\)\\(.*\\)\\'" -path)
+            (progn
+              (let (
+                    (-fpath (match-string 1 -path))
+                    (-line-num (string-to-number (match-string 2 -path))))
+					(message "fpath is")
+					(message -fpath)
+                (if (file-exists-p -fpath)
+                    (progn
+                      (find-file -fpath)
+                      (goto-char 1)
+                      (forward-line (1- -line-num)))
+                  (progn
+                    (when (y-or-n-p (format "file doesn't exist: 「%s」. Create?" -fpath))
+                      (find-file -fpath))))))
+          (progn
+		  
+			(message "pathhh is")
+			(message -path)
+            (if (file-exists-p -path)
+                (find-file -path)
+              (if (file-exists-p (concat -path ".el"))
+                  (find-file (concat -path ".el"))
+                (when (y-or-n-p (format "file doesn't exist: 「%s」. Create?" -path))
+                  (find-file -path ))))))
+				  
+				  
+				  ))))
+	
+	
+	
+	
+	
+(defun my-compile()
+(interactive)
+(shell)
+(goto-char (point-max))
+(comint-kill-input)
+(insert "ls -l")
+; send enter
+; (comint-send-input)
+)	
+
+(defun say-word (word)
+; copies current word to variable.
+; instead of showing default text showing up, empty arg is sent as the argument
+  (interactive (list
+                (read-string (format "word (%s): " (thing-at-point 'word))
+                             nil nil (thing-at-point 'word))))
+  (message "The word is %s" word))
+  
+(defun paste-from-x-clipboard()
+; execute in minibuffer
+  (interactive)
+  (let ((value
+       (read-from-minibuffer prompt initial nil nil
+                             history default inherit)))
+  (if (and (equal value "") default)
+      (if (consp default) (car default) default)
+    value))
+  ; (shell-command "ls-l")
+  (shell-command value)
+								 
+  )
+  
+(defun ff (arg)
+  "Prompt user to enter a string, with input history support."
+  (interactive
+   (list
+    (read-string "Enter (use up/down for history) :" "grep")
+		))
+  ; (message "String is %s." arg)
+  (shell-command arg))
+  
+  
+
+(defun sm-minibuffer-insert-val2 (exp)
+; http://stackoverflow.com/questions/10121944/passing-emacs-variables-to-minibuffer-shell-commands
+  (interactive
+   (list (let ((enable-recursive-minibuffers t))
+           (read-from-minibuffer "Insert: "
+                                 nil read-expression-map t
+                                 'read-expression-history))))
+    (let ((val (with-selected-window (minibuffer-selected-window)
+                 (eval exp)))
+          (standard-output (current-buffer)))
+      (prin1 val)))
+  
+(defun sm-minibuffer-insert-val (exp)
+; http://stackoverflow.com/questions/10121944/passing-emacs-variables-to-minibuffer-shell-commands
+  (interactive
+   (list (let ((enable-recursive-minibuffers t))
+           (read-from-minibuffer "Insert: "
+                                 nil read-expression-map t
+                                 'read-expression-history))))
+    (let ((val (with-selected-window (minibuffer-selected-window)
+                 (eval exp)))
+          (standard-output (current-buffer)))
+      (prin1 val)))
+  
 (defun xah-run-current-file ()
 		"Execute the current file.
 		For example, if the current buffer is the file x.py, then it'll call 「python x.py」 in a shell.
@@ -558,38 +668,34 @@ Version 2016-08-11"
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (custom-set-variables
-		 ;; custom-set-variables was added by Custom.
-		 ;; If you edit it by hand, you could mess it up, so be careful.
-		 ;; Your init file should contain only one such instance.
-		 ;; If there is more than one, they won't work right.
-		 '(blink-cursor-delay 0.3)
-		 '(blink-cursor-mode t)
-		 '(cursor-type (quote (hbar . 4)))
-		 '(custom-enabled-themes (quote (whiteboard)))
-		 '(custom-safe-themes
-		   (quote
-			("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
-		 '(hybrid-mode t)
-		 '(line-spacing 0.2)
-		 
-		 
-		 '(comint-scroll-to-bottom-on-input t)  ; always insert at the bottom
- '(comint-scroll-to-bottom-on-output t) ; always add output at the bottom
- '(comint-scroll-show-maximum-output t) ; scroll to show max possible output
- '(comint-completion-autolist t)        ; show completion list when ambiguous
- '(comint-input-ignoredups t)           ; no duplicates in command history
- '(comint-completion-addsuffix t)       ; insert space/slash after file completion
- 
- 
-		 '(package-selected-packages
-		   (quote
-			(s powerline hydra spinner parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil cygwin-mount persp-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline solarized-theme smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-delay 0.3)
+ '(blink-cursor-mode t)
+ '(comint-completion-addsuffix t)
+ '(comint-completion-autolist t)
+ '(comint-input-ignoredups t)
+ '(comint-scroll-show-maximum-output t)
+ '(comint-scroll-to-bottom-on-input t)
+ '(comint-scroll-to-bottom-on-output t)
+ '(cursor-type (quote (hbar . 4)))
+ '(custom-enabled-themes (quote (whiteboard)))
+ '(custom-safe-themes
+   (quote
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+ '(hybrid-mode t)
+ '(line-spacing 0.2)
+ '(package-selected-packages
+   (quote
+    (s powerline hydra spinner parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil cygwin-mount persp-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline solarized-theme smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 
 (custom-set-faces
-		 ;; custom-set-faces was added by Custom.
-		 ;; If you edit it by hand, you could mess it up, so be careful.
-		 ;; Your init file should contain only one such instance.
-		 ;; If there is more than one, they won't work right.
-		 '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
-		 '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
-		 '(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
