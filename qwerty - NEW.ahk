@@ -63,6 +63,7 @@ $!v::
 $!w::
 $!.::
 $!,::
+!Backspace::
 ;^b::
 s::
 h::
@@ -109,13 +110,17 @@ undo() {
 	global is_pre_spc = 0
 	Return
 }
-
+~esc::
+	quit()
+return
 
 quit() 
 {
 ; msgbox
 	Send {Esc}
+	global is_pre_x = 0
 	global is_pre_spc = 0
+	settimer,removetooltip3,-10
 	Return
 }
 
@@ -128,11 +133,13 @@ else
 	Return
 }
 
-delete_word() {
-
+delete_word(direction) {
+if(direction==1)
 	send,^+{right}
-	Send {Del}
-	global is_pre_spc = 0
+else 	
+	send,^+{left}
+Send {Del}
+global is_pre_spc = 0
 	Return
 }
 delete_char() {
@@ -158,8 +165,7 @@ key_combo_u:
 If ( is_pre_x) 
   {
     undo()
-    settimer,removetooltip,500
-    ;SetTimer, removetooltip3,-10
+    settimer,removetooltip3,-10
     ;tooltip,save
     is_pre_x = 0
   }
@@ -189,9 +195,14 @@ key_combo_A_f:
 	move_word(1)
 	Return
 	
+key_combo_A_Backspace:
+
+	delete_word(-1)
+	Return
+	
 key_combo_A_d:
 
-	delete_word()
+	delete_word(1)
 	Return
 	
 key_combo_C_d:
