@@ -57,7 +57,7 @@ send_key(HK)
 	HK := decode_key_combo(HK)
 	if regexmatch(HK,"^C-.")
 	{
-		;tooltip,%HK%
+		; msgbox,%HK%
 		stringtrimleft,key,HK,2
 		modifier=^
 	}
@@ -79,7 +79,7 @@ send_key(HK)
 	}
 	
 	send,%modifier%%key%
-	;msgbox,%modifier%%key%
+	; msgbox,%modifier%%key%
 	return
 }
  
@@ -120,7 +120,7 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 	emacs_mapping_A_Dot=^{End}
 	emacs_mapping_A_Comma=^{Home}
 	emacs_mapping_A_Backspace=key_combo_A_Backspace
-	clipboard := HK
+	
 	key_combos_map_to_function=C-x,C-g,C-d,A-Backspace,A-f,A-d,A-b
 	if HK in %key_combos_map_to_function%
 		maps_to_function := 1
@@ -128,17 +128,18 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 		maps_to_function := 0
 
 	StringReplace, HK, HK,-,_, All
-	; msgbox,%HK%`nA_Backspace %maps_to_function% %HK%
+	; msgbox,%HK% %maps_to_function%
 	
 	
 	if (maps_to_function)
 	{
-	
+	; msgbox
 		gosub, key_combo_%HK%
 	}
 	else
 	{
 		HK:= emacs_mapping_%HK%
+		; msgbox,%HK%
 		send_key(HK)
 	}
 	return HK
