@@ -1,6 +1,9 @@
 ; http://www.wilkesley.org/~ian/xah/emacs/elisp_next_prev_user_buffer.html
 ; http://www.wilkesley.org/~ian/xah/emacs/emacs_stop_cursor_enter_prompt.html
 
+; TO DO
+; ========
+; http://ergoemacs.org/emacs/elisp_close_buffer_open_last_closed.html
 ; http://www.wilkesley.org/~ian/xah/misc/ergoemacs_vi_mode.html
 ; use single key for switching bufffer use xah function for switch
 
@@ -164,7 +167,7 @@
 		dotspacemacs-display-default-layout nil
 		;; If non nil then the last auto saved layouts are resume automatically upon
 		;; start. (default nil)
-		dotspacemacs-auto-resume-layouts nil
+		dotspacemacs-auto-resume-layouts t
 		;; Location where to auto-save files. Possible values are `original' to
 		;; auto-save the file in-place, `cache' to auto-save the file to another
 		;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -281,7 +284,7 @@
 
 
 (defun dotspacemacs/user-config ()
-		  "Configuration function for user code.
+		"Configuration function for user code.
 		This function is called at the very end of Spacemacs initialization after
 		layers configuration.
 		This is the place where most of your configurations should be done. Unless it is
@@ -294,36 +297,81 @@
 		
 		
 
+(recentf-mode 1) ; keep a list of recently opened files
+(setq initial-major-mode (quote text-mode)) ; default mode
+(defalias 'list-buffers 'ibuffer) ; always use ibuffer
+;; make frequently used commands short
+(defalias 'qrr 'query-replace-regexp)
+(defalias 'lml 'list-matching-lines)
+(defalias 'dml 'delete-matching-lines)
+(defalias 'dnml 'delete-non-matching-lines)
+(defalias 'dtw 'delete-trailing-whitespace)
+(defalias 'sl 'sort-lines)
+(defalias 'rr 'reverse-region)
+(defalias 'rs 'replace-string)
 
+(defalias 'g 'grep)
+(defalias 'gf 'grep-find)
+(defalias 'fd 'find-dired)
+(defalias 'rb 'revert-buffer)
+(defalias 'sh 'shell)
+(defalias 'fb 'flyspell-buffer)
+(defalias 'sbc 'set-background-color)
+(defalias 'rof 'recentf-open-files)
+(defalias 'lcd 'list-colors-display)
+(defalias 'cc 'calc)
+; elisp
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ed 'eval-defun)
+(defalias 'eis 'elisp-index-search)
+(defalias 'lf 'load-file)
+; major modes
+(defalias 'hm 'html-mode)
+(defalias 'tm 'text-mode)
+(defalias 'elm 'emacs-lisp-mode)
+(defalias 'om 'org-mode)
+(defalias 'ssm 'shell-script-mode)
+; minor modes
+(defalias 'wsm 'whitespace-mode)
+(defalias 'gwsm 'global-whitespace-mode)
+(defalias 'vlm 'visual-line-mode)
+(defalias 'glm 'global-linum-mode)
+; Save the above in file and name it my-alias.el, then put it in your ~/.emacs.d/ directory. Then, in your emacs init file, add:
+; (load "my-alias")
+;; Tell emacs where is your personal elisp lib dir
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 ; save the place in files
-		
-		(require 'saveplace)
-		(setq-default save-place t)
+
+(require 'saveplace)
+(setq-default save-place t)
+(global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs")))
 
 (global-set-key [f1] 'shell-other-window) ; shell
+(global-set-key (kbd "M-9") 'kill-whole-line)
 
-		(global-set-key (kbd "C-=") 'text-scale-increase)
-		(global-set-key (kbd "C--") 'text-scale-decrease)
-		(global-set-key (kbd "<f8>") 'xah-run-current-file)
-		
-  ;; Automatically reload files was modified by external program
-    (global-auto-revert-mode 1)
-  ;; and display "half modal" warning about it
-  ;(require 'w32-msgbox)
-    (setq revert-buffer-function 'inform-revert-modified-file)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<f8>") 'xah-run-current-file)
 
-		(global-set-key (kbd "<mouse-3>") 'nil)
-		(fset 'evil-visual-update-x-selection 'ignore)
-		(setq mouse-drag-copy-region nil)
-		(setq x-select-enable-primary nil)
-		(setq visible-bell 1)
-		(cd "C:\\...\\master\\AHK\\emacs-plugins\\emacs plugins\\el-qrencode-master")
-		(load-file "C:\\...\\master\\AHK\\emacs-plugins\\emacs plugins\\el-qrencode-master\\load.el")
+;; Automatically reload files was modified by external program
+(global-auto-revert-mode 1)
+;; and display "half modal" warning about it
+;(require 'w32-msgbox)
+(setq revert-buffer-function 'inform-revert-modified-file)
+
+(global-set-key (kbd "<mouse-3>") 'nil)
+(fset 'evil-visual-update-x-selection 'ignore)
+(setq mouse-drag-copy-region nil)
+(setq x-select-enable-primary nil)
+(setq visible-bell 1)
+(cd "C:\\Users\\cibin\\Downloads\\el-qrencode-master\\el-qrencode-master")
+(load-file "C:\\Users\\cibin\\Downloads\\el-qrencode-master\\el-qrencode-master\\load.el")
 (electric-pair-mode 1) ; automatically insert right brackets when left one is typed?
 (show-paren-mode 1) ; turn on bracket match highlight
 
-; http://ergoemacs.org/emacs/emacs_make_modern.html
-;; save minibuffer history
+; http://ergoemacs.org/emacs/emacs_make_modern.html 
+; save minibuffer history
 (savehist-mode 1)
 
 (setq backup-by-copying t) ; stop emacs's backup changing the file's creation date of the original file?
@@ -337,48 +385,27 @@
 (desktop-save-mode 1) ; save/restore opened files from last session
 (global-visual-line-mode 1) ; soft line wrap ; 1 for on, 0 for off.
 
-)
 
+(require 'ido) ; part of emacs
 
-;; make backup to a designated dir, mirroring the full path
+(defvar xah-filelist nil "Association list of file/dir paths. Used by `xah-open-file-fast'. Key is a short abbrev string, Value is file path string.")
 
-(defun my-backup-file-name (fpath)
-  "Return a new file path of a given file path.
-If the new path's directories does not exist, create them."
-  (let* (
-        (backupRootDir "~/.emacs.d/emacs-backup/")
-        (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, ➢ for example: “C:”
-        (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
-        )
-    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
-    backupFilePath
-  )
-)
+(setq xah-filelist
+      '(
+        ("3emacs" . "~/.emacs.d/" )
+        ("git" . "~/git/" )
+        ("todo" . "~/todo.org" )
+        ("keys" . "~/git/my_emacs_init/my_keybinding.el" )
+        ("download" . "~/Downloads/" )
+        ("pictures" . "~/Pictures/" )
+        ;; more here
+        ) )
 
-
-
-(defun shell-other-window ()
-  "Open a `shell' in a new window."
-  (interactive)
-  (let ((buf (shell)))
-    (switch-to-buffer (other-buffer buf))
-    (switch-to-buffer-other-window buf)))
-	
-	
-(defun inform-revert-modified-file (&optional p1 p2)
-      "bdimych custom function"
-      (let ((revert-buffer-function nil))
-			 (message "File modified. Reloaded." ) ; %s: %s" title body)
-            (revert-buffer p1 p2)
-        ;(w32-msgbox (buffer-file-name) "Emacs: Modified file automatically reverted" 'vb-ok-only 'vb-information nil t)
-      )
-    )
-	
-	
+		
 (menu-bar-mode -1)
 (when (display-graphic-p)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
+	(tool-bar-mode -1)
+	(scroll-bar-mode -1))
 
 
 (set-face-attribute 'vertical-border nil :foreground (face-attribute 'fringe :background))
@@ -403,6 +430,509 @@ If the new path's directories does not exist, create them."
         ("\\.\\(?:mp4\\|mp3\\|mkv\\|avi\\|flv\\|ogv\\)\\(?:\\.part\\)?\\'"
          "vlc")
         ("\\.html?\\'" "firefox")))
+		
+	
+
+; ===========
+
+;https://github.com/mcandre/dotfiles/blob/master/.emacs
+;; Open project file by fuzzy name
+
+(use-package fiplr
+  :bind ("C-p" . fiplr-find-file)
+  :defines fipl-ignored-globs
+  :config
+  (setq fiplr-ignored-globs
+        '((directories
+           ;; Version control
+           (".git"
+            ".svn"
+            ".hg"
+            ".bzr"
+            ;; NPM
+            "node_modules"
+            ;; Bower
+            "bower_components"
+            ;; Maven
+            "target"
+            ;; Gradle
+            "build"
+            ".gradle"
+            ;; Python
+            "__pycache__"
+            ;; IntelliJ
+            ".idea"
+            ;; Infer
+            "infer-out"))
+          (files
+           ;; Emacs
+           (".#*"
+            ;; Vim
+            "*~"
+            ;; Objects
+            "*.so"
+            "*.o"
+            "*.obj"
+            "*.hi"
+            ;; Media
+            "*.jpg"
+            "*.png"
+            "*.gif"
+            "*.pdf"
+            ;; Archives
+            "*.gz"
+            "*.zip"))))
+			
+ ;; Better TAB handling
+  (define-key *fiplr-keymap* (kbd "TAB")
+    (lambda ()
+(interactive))))
+  (use-package markdown-mode
+    :mode ("\\.md$" . gfm-mode)
+    :init
+    ;; Use markdown-mode for *scratch*
+    (setq initial-scratch-message nil
+          initial-major-mode 'gfm-mode)
+    :config
+    ;; Block indent for Markdown
+    (add-hook 'markdown-mode-hook
+              (lambda ()
+
+                (setq indent-tabs-mode nil
+                      tab-width 4)
+                (define-key markdown-mode-map (kbd "TAB") 'traditional-indent)
+                (define-key markdown-mode-map (kbd "<backtab>") 'traditional-outdent)
+                (define-key markdown-mode-map (kbd "M-<left>") nil)
+                (define-key markdown-mode-map (kbd "M-<right>") nil)
+                ;; Remove triple backtick 'features'
+                (define-key gfm-mode-map (kbd "`") nil))))
+
+
+; ====
+;; Typing text replaces marked regions
+(delete-selection-mode 1)
+
+
+(setq enablmÍrecursive-minibuffers t) ;; allow recursive editing in minibuffer
+
+(follow-mode t)                       ;; follow-mode allows easier editing of long files
+
+(global-set-key [f5]          '(lambda () (interactive) (kill-buffer (current-buffer))))
+
+; to have the name of the file as the name of the window:
+(setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
+
+
+
+;; from ; https://snarfed.org/dotfiles/.emacs
+;; C-8 for *scratch*, C-9 for *compilation*.
+;; (use M-8, etc as alternates since C-number keys don't have ascii control
+;; codes, so they can't be used in terminal frames.)
+(defun switch-to-scratch ()
+  (interactive) (bury-then-switch-to-buffer "*scratch*"))
+(global-set-key [(control \8)] 'switch-to-scratch)
+(global-set-key [(control x) (\8)] 'switch-to-scratch)
+(global-set-key [(meta \8)] 'switch-to-scratch)
+
+; interpret and use ansi color codes in shell buffers
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'diff-mode-hook 'ansi-color-for-comint-mode-on)
+
+; don't highlight trailing whitespace in some modes
+(dolist (hook '(shell-mode-hook compilation-mode-hook diff-mode-hook))
+  (add-hook hook (lambda () (set-variable 'show-trailing-whitespace nil))))
+
+ 
+ 
+(defun rename-this-file (new-file-name)
+  "Renames this file and switches the buffer to point to the new file."
+  (interactive "FRename to: ")
+  (let ((orig-buffer (current-buffer)))
+    (rename-file buffer-file-name new-file-name)
+    (find-file new-file-name)
+    (kill-buffer orig-buffer)))
+
+(global-set-key [(control x) (control r)] 'rename-this-file)
+
+; color themes, deftheme style (added in emacs 24).
+(load-theme 'manoj-dark)
+
+
+
+(global-set-key (kbd "M-p") 'move-line-region-up)
+(global-set-key (kbd "M-n") 'move-line-region-down)
+(global-set-key (kbd "M-<up>") 'move-line-region-up)
+(global-set-key (kbd "M-<down>") 'move-line-region-down)
+; (global-set-key (kbd "M-<up>") 'move-line-up)
+; (global-set-key (kbd "M-<down>") 'move-line-down)
+
+; (global-set-key (kbd "M-<up>") 'move-region-up)
+; (global-set-key (kbd "M-<down>") 'move-region-down)
+
+
+(global-set-key [?\C-h] 'delete-backward-char)
+; (global-set-key [?\C-x ?h] 'help-command)    ;; overrides mark-whole-buffer
+
+
+(global-set-key [C-right] 'geosoft-forward-word)
+(global-set-key [C-left] 'geosoft-backward-word) 
+(global-set-key [f4] 'bubble-buffer) 
+		
+
+
+; to make sure case is preserved when expanding
+(setq dabbrev-case-replace nil)		
+
+(global-set-key [S-return]   'open-next-line)
+(global-set-key [C-S-return] 'open-previous-line)
+(global-set-key (kbd "C-o") 'open-next-line)
+(global-set-key (kbd "M-o") 'open-previous-line)
+
+; go to the last change
+(package-require 'goto-chg)
+(global-set-key [(control .)] 'goto-last-change)
+(global-set-key (kbd "C-.") 'goto-last-change)
+; M-. can conflict with etags tag search. But C-. can get overwritten
+; by flyspell-auto-correct-word. And goto-last-change needs a really
+; fast key.
+(global-set-key [(meta .)] 'goto-last-change)
+; ensure that even in worst case some goto-last-change is available
+(global-set-key [(control meta .)] 'goto-last-change)
+
+;; Highlight TODO and FIXME in comments 
+(package-require 'fic-ext-mode)
+(add-something-to-mode-hooks '(c++ tcl emacs-lisp python text markdown latex) 'fic-ext-mode)
+
+
+; file-cache
+
+
+
+(add-to-list 'file-cache-filter-regexps "project/boot")
+(add-to-list 'file-cache-filter-regexps "target")
+
+;(add-to-list 'file-cache-filter-regexps "\\.sw\w$")
+(add-to-list 'file-cache-filter-regexps "/\\..*")
+;;(add-to-list 'file-cache-filter-regexps "/\\.#.*")
+(add-to-list 'file-cache-filter-regexps "\\.class$")
+(add-to-list 'file-cache-filter-regexps "\\.gz$")
+(add-to-list 'file-cache-filter-regexps "\\.jpg$")
+(add-to-list 'file-cache-filter-regexps "\\.gif$")
+(add-to-list 'file-cache-filter-regexps "\\.png$")
+(add-to-list 'file-cache-filter-regexps "\\.jar$")
+(add-to-list 'file-cache-filter-regexps "\\.pyc$")
+(add-to-list 'file-cache-filter-regexps "\\.svn-base$")
+(add-to-list 'file-cache-filter-regexps "\\.dump$")
+(add-to-list 'file-cache-filter-regexps "/\\.\w+$")
+(add-to-list 'file-cache-filter-regexps "/\\.git")
+(add-to-list 'file-cache-filter-regexps "/\\.svn")
+
+(defvar file-cache-file "~/.file_cache")
+(file-cache-read-cache-from-file)
+
+
+
+; ======
+
+
+;; Fast line numbers
+(use-package nlinum
+  :config
+  ;; Line number gutter in ncurses mode
+  (unless window-system
+    (setq nlinum-format "%d "))
+  ;; :idle
+  (global-nlinum-mode))
+  
+; extra major modes!
+(require 'markdown-mode)
+
+
+) ; end of user-config()
+
+
+
+;; file cache
+; https://github.com/hjz/emacs/blob/master/config/filecache.el
+(require 'filecache)
+(require 'ido)
+
+(defun file-cache-ido-find-file (file)
+  "Using ido, interactively open file from file cache'.
+First select a file, matched using ido-switch-buffer against the contents
+in `file-cache-alist'. If the file exist in more than one
+directory, select directory. Lastly the file is opened."
+  (interactive (list (file-cache-ido-read "File: "
+                                          (mapcar
+                                           (lambda (x)
+                                             (car x))
+                                           file-cache-alist))))
+  (let* ((record (assoc file file-cache-alist)))
+    (find-file
+     (expand-file-name
+      file
+      (if (= (length record) 2)
+          (car (cdr record))
+        (file-cache-ido-read
+         (format "Find %s in dir: " file) (cdr record)))))))
+
+(defun file-cache-ido-read (prompt choices)
+  (let ((ido-make-buffer-list-hook
+	 (lambda ()
+	   (setq ido-temp-list choices))))
+    (ido-read-buffer prompt)))
+(defun file-cache-refresh ()
+  (interactive)
+  (message "Loading file cache...")
+  (file-cache-clear-cache)
+  (file-cache-add-directory-using-find "C:\\cbn_gits\\AHK")
+  (file-cache-add-directory-using-find "~/ps/twitter")
+  (file-cache-add-directory-using-find "~/.emacs.d")
+  ;; (file-cache-add-directory-using-find "~/ps/science")
+  ;; (file-cache-add-directory "~/")
+  ;; (file-cache-add-file-list (list "~/foo/bar" "~/baz/bar"))
+  (file-cache-save-cache-to-file)
+  (message "File cache loaded and saved to %s" file-cache-file))
+
+(defun file-cache-save-cache-to-file ()
+  "Save contents of `file-cache-alist' to ~/.file_cache.
+For later retrieval using `file-cache-read-cache-from-file'"
+  (interactive)
+  (with-temp-file (expand-file-name file-cache-file)
+    (prin1 file-cache-alist (current-buffer)))
+  (kill-buffer (substring file-cache-file 2)))
+
+(defun file-cache-read-cache-from-file ()
+  "Clear `file-cache-alist' and read cache from FILE.
+  The file cache can be saved to a file using
+  `file-cache-save-cache-to-file'."
+  (interactive)
+  (file-cache-clear-cache)
+  (save-excursion
+    (set-buffer (find-file-noselect file-cache-file))
+    (beginning-of-buffer)
+    (setq file-cache-alist (read (current-buffer)))))
+
+
+
+
+
+
+(defun add-something-to-mode-hooks (mode-list something)
+  "helper function to add a callback to multiple hooks"
+  (dolist (mode mode-list)
+    (add-hook (intern (concat (symbol-name mode) "-mode-hook")) something)))
+
+
+
+
+; https://www.emacswiki.org/emacs/OpenNextLine
+    ;; Behave like vi's o command
+    (defun open-next-line (arg)
+      "Move to the next line and then opens a line.
+    See also `newline-and-indent'."
+      (interactive "p")
+      (end-of-line)
+      (open-line arg)
+      (next-line 1)
+      (when newline-and-indent
+        (indent-according-to-mode)))
+
+
+    ;; Behave like vi's O command
+    (defun open-previous-line (arg)
+      "Open a new line before the current one. 
+     See also `newline-and-indent'."
+      (interactive "p")
+      (beginning-of-line)
+      (open-line arg)
+      (when newline-and-indent
+        (indent-according-to-mode)))
+
+    ;; Autoindent open-*-lines
+    (defvar newline-and-indent t
+      "Modify the behavior of the open-*-line functions to cause them to autoindent.")
+	  
+
+; bubble-buffer
+
+(defvar LIMIT 1)
+(defvar time 0)
+(defvar mylist nil)
+
+(defun time-now ()
+   (car (cdr (current-time))))
+
+(defun bubble-buffer ()
+   (interactive)
+   (if (or (> (- (time-now) time) LIMIT) (null mylist))
+       (progn (setq mylist (copy-alist (buffer-list)))
+          (delq (get-buffer " *Minibuf-0*") mylist)
+          (delq (get-buffer " *Minibuf-1*") mylist)))
+   (bury-buffer (car mylist))
+   (setq mylist (cdr mylist))
+   (setq newtop (car mylist))
+   (switch-to-buffer (car mylist))
+   (setq rest (cdr (copy-alist mylist)))
+   (while rest
+     (bury-buffer (car rest))
+     (setq rest (cdr rest)))
+   (setq time (time-now)))
+
+
+
+(defun move-region (start end n)
+;;https://www.emacswiki.org/emacs/MoveRegion
+  "Move the current region up or down by N lines."
+  (interactive "r\np")
+  (let ((line-text (delete-and-extract-region start end)))
+    (forward-line n)
+    (let ((start (point)))
+      (insert line-text)
+      (setq deactivate-mark nil)
+      (set-mark start))))
+
+(defun move-region-up (start end n)
+  "Move the current line up by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) -1 (- n))))
+
+(defun move-region-down (start end n)
+  "Move the current line down by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) 1 n)))
+
+
+
+
+(defun move-line (n)
+;; https://www.emacswiki.org/emacs/MoveLine
+  "Move the current line up or down by N lines."
+  (interactive "p")
+  (setq col (current-column))
+  (beginning-of-line) (setq start (point))
+  (end-of-line) (forward-char) (setq end (point))
+  (let ((line-text (delete-and-extract-region start end)))
+    (forward-line n)
+    (insert line-text)
+    ;; restore point to original column in moved line
+    (forward-line -1)
+    (forward-char col)))
+
+(defun move-line-up (n)
+  "Move the current line up by N lines."
+  (interactive "p")
+  (move-line (if (null n) -1 (- n))))
+
+(defun move-line-down (n)
+  "Move the current line down by N lines."
+  (interactive "p")
+  (move-line (if (null n) 1 n)))
+
+(defun move-line-region-up (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-up start end n) (move-line-up n)))
+
+(defun move-line-region-down (&optional start end n)
+  (interactive "r\np")
+  (if (use-region-p) (move-region-down start end n) (move-line-down n)))
+
+  
+  
+  
+  
+  
+
+; http://geosoft.no/development/emacs.html
+ ; For fast navigation within an Emacs buffer it is necessary to be able to move swiftly between words. The functions below change the default Emacs behavour on this point slightly, to make them a lot more usable.
+; Note the way that the underscore character is treated. This is convinient behaviour in programming. Other domains may have different requirements, and these functions should be easy to modify in this respect.
+
+(defun geosoft-forward-word ()
+   ;; Move one word forward. Leave the pointer at start of word
+   ;; instead of emacs default end of word. Treat _ as part of word
+   (interactive)
+   (forward-char 1)
+   (backward-word 1)
+   (forward-word 2)
+   (backward-word 1)
+   (backward-char 1)
+   (cond ((looking-at "_") (forward-char 1) (geosoft-forward-word))
+         (t (forward-char 1))))
+
+(defun geosoft-backward-word ()
+   ;; Move one word backward. Leave the pointer at start of word
+   ;; Treat _ as part of word
+   (interactive)
+   (backward-word 1)
+   (backward-char 1)
+   (cond ((looking-at "_") (geosoft-backward-word))
+         (t (forward-char 1))))
+		 
+		 
+
+;; make backup to a designated dir, mirroring the full path
+
+(defun my-backup-file-name (fpath)
+"Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* (
+        (backupRootDir "~/.emacs.d/emacs-backup/")
+        (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, ➢ for example: “C:”
+        (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+        )
+    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+    backupFilePath
+  )
+)
+
+(defun xah-open-file-fast ()
+"Prompt to open a file from `xah-filelist'.
+URL `http://ergoemacs.org/emacs/emacs_hotkey_open_file_fast.html'
+Version 2015-04-23"
+; Call xah-open-file-fast, then it will prompt with real-time name completion as you type.
+; You should assign it a key. For example, 【F8】, so you can open a file by 【F8 1】, 【F8 2】, etc.
+  (interactive)
+  ; (let ((-abbrevCode
+         ; (ido-completing-read "Open:" (mapcar (lambda (-x) (car -x)) xah-filelist))))
+    ; (find-file (cdr (assoc -abbrevCode xah-filelist))))
+	; OR
+	(let ((j 1) (file (car xah-filelist)))
+(while file
+(let ((name (intern (format "Open:%s" (car file)))))
+(fset name `(lambda () (interactive) (find-file ,(cdr file))))
+(setq file (nth j xah-filelist))
+(or (< j 10) (setq file nil j 0))
+(global-set-key (kbd (format "<f2> %d" j)) name)
+(setq j (1+ j)))))
+	)
+(defun xah-new-empty-buffer ()
+  "Open a new empty buffer.
+URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+Version 2016-08-11"
+  (interactive)
+  (let ((-buf (generate-new-buffer "untitled")))
+    (switch-to-buffer -buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)))
+
+(defun shell-other-window ()
+  "Open a `shell' in a new window."
+  (interactive)
+  (let ((buf (shell)))
+    (switch-to-buffer (other-buffer buf))
+    (switch-to-buffer-other-window buf)))
+	
+	
+(defun inform-revert-modified-file (&optional p1 p2)
+      "bdimych custom function"
+      (let ((revert-buffer-function nil))
+			 (message "File modified. Reloaded." ) ; %s: %s" title body)
+            (revert-buffer p1 p2)
+        ;(w32-msgbox (buffer-file-name) "Emacs: Modified file automatically reverted" 'vb-ok-only 'vb-information nil t)
+      )
+    )
+	
+	
 
 
 (defun reload-settings ()
@@ -698,4 +1228,4 @@ URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
+'(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
