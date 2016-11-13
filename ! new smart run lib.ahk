@@ -245,21 +245,21 @@ if !(HotkeySTEP87)
 			if ( smart_check_count=1 ) 
 			{
 				tooltip, no_Match
-				sleep,500
+				sleep,300
 				tooltip,Retry %smart_check_count%`n%tooltip_msg%
-				sleep,1000
+				sleep,500
 				selText := RegExReplace(selText, "^(.*)?(\w:|/)(.*)","$2$3")	
 			}
 			else if ( smart_check_count = 2 )
 			{
 				tooltip,Retry %smart_check_count%`n%tooltip_msg%
-				sleep,1000
+				sleep,500
 				selText := RegExReplace(selText,"(^\s+)|(\s+$)|""","")
 			}
 			else if ( smart_check_count = 3 )
 			{
 				tooltip,Retry %smart_check_count%`n%tooltip_msg%
-				sleep,1000
+				sleep,500
 				selText := RegExReplace(selText,"(^#include)","")
 			}
 			else ; no match found even after cleaning

@@ -4,6 +4,7 @@
 Menu, Tray, Icon, Shell32.dll, 37
 #SingleInstance force 
 settimer, reminder, 1200000
+; settimer, reminder, 1200
 ; settimer, Battery_Check, 1200000
 ; settimer,scheduler,-1 
 settimer,scheduler,600000
@@ -94,11 +95,14 @@ SendMessage,0x112,0xF170,2,,Program Manager
 return
 
 help_tips:
-	FileRead, text, C:\users\%A_UserName%\Desktop\all hotkeys.txt 
+
+	iniread,help_tips_file,all_settings.ini,paths,help_tips_file
+	FileRead, text, %help_tips_file%
+	; msgbox,%help_tips_file%
 	max := no_of_lines(text)
 
 	Random, rand_no ,0 ,Max
-	FileReadLine, text, C:\users\%A_UserName%\Desktop\all hotkeys.txt , %rand_no%
+	FileReadLine, text, %help_tips_file% , %rand_no%
 	guicontrol,,tips_text,%text%
 
 return
@@ -110,11 +114,12 @@ tasks=
 (
 https://www.youtube.com/watch?v=vsQf9OHU35s&list=PLssi8O1SK6QIXfWuaHApOmTDWbVqegZr5,url,1455
 https://www.youtube.com/watch?v=FNQxxpM1yOs,url,1855
-C:\users\%A_UserName%\Desktop\naukri_auto_updater.py,file,1100
-C:\users\%A_UserName%\Desktop\naukri_auto_updater.py,file,1430
-http://www.naukri.com/walk-in-jobs-in-bangalore,1450
 C:\Program Files (x86)\Windows Media Player\wmplayer.exe,file,1410
+http://www.naukri.com/walk-in-jobs-in-bangalore,1450
 )
+; C:\users\%A_UserName%\Desktop\naukri_auto_updater.py,file,1100
+; C:\users\%A_UserName%\Desktop\naukri_auto_updater.py,file,1430
+
 FormatTime, Time_now, T12,  hhmm
 
 

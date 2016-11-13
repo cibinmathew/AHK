@@ -13,6 +13,7 @@ Menu, Tray, Icon, Shell32.dll,13
 #SingleInstance force
 
 
+iniread,nircmd_Folder,all_settings.ini,paths,nircmd_Folder
 
 space_hotkey =1
 power_save:=0
@@ -370,7 +371,7 @@ IsWindow(hwnd)
 ; <^printscreen::	; screenshot, save & open
 screenshot_save_open:
 FormatTime, TimeString2, , dd MMM  yyyy ( ddd ) hh-mm ss tt
-Runwait, %comspec% /c ""F:\cbn\opus\apps\nircmd\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\screenshot %TimeString2%.png" ,,Hide
+Runwait, %comspec% /c ""%nircmd_Folder%\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\screenshot %TimeString2%.png" ,,Hide
 screenshot_moved:=0
 tooltip,screenshot saved to %A_ScriptDir%\screenshots\screenshot %TimeString2%.png`nLshift=move to fav`nRshift =open`nLctrl=cancel,,,2
 settimer,RemoveToolTip2,-4000
@@ -400,6 +401,7 @@ else IfInString, ErrorLevel, EndKey:
 			{
 			run,"%A_ScriptDir%\screenshots"
 			sleep,200
+			
 			run,"%A_ScriptDir%\screenshots\screenshot %TimeString2%.png"
 			}
 		settimer,removetooltip2,-4000
@@ -436,7 +438,7 @@ screenshot_loop_5:
 		FormatTime, TimeString2, , dd MMM  yyyy ( ddd ) hh-mm ss tt
 
 		tooltip,%a_index%
-		Runwait, %comspec% /c ""F:\cbn\opus\apps\nircmd\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\screenshot %TimeString2%.png" ,,Hide
+		Runwait, %comspec% /c ""%nircmd_Folder%\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\screenshot %TimeString2%.png" ,,Hide
 		sleep,%printscreen_delay%
 	}
 	tooltip,
@@ -465,7 +467,8 @@ save_AOT_Screenshot:
 	tooltip,click
 	sleep,50
 	tooltip
-	Runwait, %comspec% /c ""F:\cbn\opus\apps\nircmd\nircmd.exe" cmdwait 100 savescreenshot "C:\users\%a_username%\Downloads\AOT Clipboard Image.png" ,,Hide
+	
+	Runwait, %comspec% /c ""%nircmd_Folder%\nircmd.exe" cmdwait 100 savescreenshot "C:\users\%a_username%\Downloads\AOT Clipboard Image.png" ,,Hide
 	tooltip,saved`n^+5:: open
 	sleep,2000
 	tooltip	; sleep,%printscreen_delay%
@@ -477,7 +480,7 @@ save_AOT_image:
 	if !ErrorLevel
 		inputbox,tmp,save screenshot as,click OK to take snapshot`n`nin %A_ScriptDir%\screenshots\,,,,,,,,%TimeString2%
 	sleep,100
-	Runwait, %comspec% /c ""F:\cbn\opus\apps\nircmd\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\%tmp%.png" ,,Hide
+	Runwait, %comspec% /c ""%nircmd_Folder%\nircmd.exe" cmdwait 100 savescreenshot "%A_ScriptDir%\screenshots\%tmp%.png" ,,Hide
 
 	tooltip,screenshot saved...f2=open
 	settimer,removetooltip,-2000
@@ -1182,15 +1185,14 @@ return
 
 ^+f11::
 iniread,f_path,all_settings.ini,paths,emacs
-run, "%f_path%" "C:\Users\cibin\Downloads\clear these doubts.txt" -n
+iniread,emacs_default_startup_file,all_settings.ini,paths,emacs_default_startup_file
+run, "%f_path%" "%emacs_default_startup_file%" -n
 
 return
 
-^+f12::
-run, "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\packages\Scripts\python.exe" "C:\users\%A_UserName%\ca_cabling\depot.prod.corduroy\configadvisor.py"
 
-return
 ^F11::
-run,"C:\cbn_gits\AHK\python.py"
+iniread,run_python,all_settings.ini,paths,run_python
+run,"%run_python%"
 
 return

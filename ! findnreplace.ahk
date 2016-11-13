@@ -48,7 +48,7 @@ HK_cycle_register("<^!o","Control_launcher_HK",4,4000,"LCtrl", "$^q",config)
 return
 
 
-!p::	; findreplace
+>!p::	; findreplace
 	settimer , cancelHotkeySTEP29,off	
 	if !(HotkeySTEP29_active)	;	if hotkey is currently not in cycle mode 
 	{
