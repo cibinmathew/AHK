@@ -25,5 +25,5 @@ map s D
 cmap <Up> <S-Tab>
 cmap <Down> <Tab>
 set hintkeys=sfdjkla;hgie
-" set no status line -- i.e keys don't show as you type&Àenabled by default
+" set no status line -- i.e keys don't show as you type. enabled by default
 set showstatus=1
