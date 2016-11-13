@@ -1,0 +1,29 @@
+map ga g0
+map l gt
+" left
+map J h
+" right
+map K l
+map h gT
+map j 5j
+map k 5k
+map d <C-f>
+map e <C-b>
+map a gg
+
+" remove current tab
+" map d dc
+" unmap dm
+" unmap do
+" unmap dl
+" unmap dr
+" unmap dp
+" unmap dP
+
+map s D
+
+cmap <Up> <S-Tab>
+cmap <Down> <Tab>
+set hintkeys=sfdjkla;hgie
+" set no status line -- i.e keys don't show as you type&Àenabled by default
+set showstatus=1
