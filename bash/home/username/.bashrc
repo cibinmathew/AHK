@@ -6,13 +6,11 @@
 source $HOME/lib.sh
 source $HOME/myalias.sh
 
-
 function xpl() {
 	#alias vl='vim $(fc -s)' # will open the output of last command in vi
 	file ="$(fc -s)"
-	 ff=$(echo /cygdrive/f/july\ 2/ |  sed -r "s/\\/cygdrive\\/(.)\\//\1:\\\\\\\/" | sed -e "s/\\//\\\\\\\/g" | sed -r "s/(.*)\
-\\\\\\/\"\1\"/")
-explorer.exe "$ff"
+	ff=$(echo /cygdrive/f/july\ 2/ |  sed -r "s/\\/cygdrive\\/(.)\\//\1:\\\\\\\/" | sed -e "s/\\//\\\\\\\/g" | sed -r "s/(.*)\\\\\\\/\"\1\"/")
+	explorer.exe "$ff"
 	if [ ! -f "$file" ]; then
 		echo "File exist"
     else
@@ -21,25 +19,25 @@ explorer.exe "$ff"
 }
 
 function myallgrep() { 
-if [ -z "$1" ]; then
-    # display usage if no parameters given
-    echo "Usage: cibin grepp for text files"
- else
-lfind  /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/*  -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -type f -exec grep -PrnIi "$1"  --color=auto {} /dev/null \;
-# By using /dev/null as an extra input file grep "thinks" it dealing with multiple files, but /dev/null is of course empty, so it will not show up in the match list
+	if [ -z "$1" ]; then
+		# display usage if no parameters given
+		echo "Usage: cibin grepp for text files"
+	 else
+	lfind  /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/*  -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -type f -exec grep -PrnIi "$1"  --color=auto {} /dev/null \;
+	# By using /dev/null as an extra input file grep "thinks" it dealing with multiple files, but /dev/null is of course empty, so it will not show up in the match list
 
- #grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/* ; 
- fi
+	 #grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/* ; 
+	 fi
  }
  
 function mygrep() { 
-if [ -z "$1" ]; then
-    # display usage if no parameters given
-    echo "Usage: cibin grepp for text files"
- else
+	if [ -z "$1" ]; then
+		# display usage if no parameters given
+		echo "Usage: cibin grepp for text files"
+	 else
 
- grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts; 
- fi
+	 grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts; 
+	 fi
  }
 
 function open() { 
@@ -93,6 +91,28 @@ if [ $# -eq 0 -o  -n "$1" ]; then
  }
  
 
+
+function myindexfolders() { 
+# if [ -z "$1" ]; then
+    # display usage if no parameters given
+    # echo "Usage: cibin index all folders to $Universal_home/Downloads/all_folders.txt"
+	# lfind /cygdrive -type d -iname "*" > "$Universal_home/Downloads/all_folders.txt"
+ # fi
+   cat "$Universal_home/Downloads/all_folders.txt" 
+   cat "$Universal_home/Downloads/all_folders.txt" | sed -r "s/\\/cygdrive\\/(.)\\//\1:\\\\\\\/" | sed -e "s/\\//\\\\\\\/g"  > "$Universal_home/Downloads/all_folders2.txt"
+ }
+
+
+function myindexemacs() { 
+if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: cibin index all files to $Universal_home/Downloads/all_files.txt"
+	echo '(' > "$Universal_home/Downloads/.filecache2"
+	lfind.exe /cygdrive/c/cbn_gits/AHK  -iname "*" -printf '("%P" "%h")'  >> "$Universal_home/Downloads/.filecache2"
+	echo ')' >> "$Universal_home/Downloads/.filecache2"
+
+ fi
+ }
 
 function myindex() { 
 if [ -z "$1" ]; then
