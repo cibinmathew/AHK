@@ -340,10 +340,7 @@
 ; Save the above in file and name it my-alias.el, then put it in your ~/.emacs.d/ directory. Then, in your emacs init file, add:
 ; (load "my-alias")
 ;; Tell emacs where is your personal elisp lib dir
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-(load "~/.emacs.d/config/filecache")
 
-(file-cache-read-cache-from-file)
 ; save the place in files
 
 (require 'saveplace)
@@ -368,8 +365,19 @@
 (setq mouse-drag-copy-region nil)
 (setq x-select-enable-primary nil)
 (setq visible-bell 1)
-(cd "C:\\Users\\cibin\\Downloads\\el-qrencode-master\\el-qrencode-master")
-(load-file "C:\\Users\\cibin\\Downloads\\el-qrencode-master\\el-qrencode-master\\load.el")
+(cd "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\others\\el-qrencode-master")
+(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\others\\el-qrencode-master\\load.el")
+; (load-file "~/.emacs.d/config/personal-configs/filecache.el")
+
+;; Load up starter kit customizations
+
+; (require 'starter-kit-defuns)
+; (require 'starter-kit-bindings)
+
+(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\personal-configs\\starter-kit-bindings.el")
+(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\personal-configs\\filecache.el")
+(file-cache-read-cache-from-file)
+
 (electric-pair-mode 1) ; automatically insert right brackets when left one is typed?
 (show-paren-mode 1) ; turn on bracket match highlight
 
@@ -434,7 +442,44 @@
          "vlc")
         ("\\.html?\\'" "firefox")))
 		
-	
+
+(global-set-key [(control x) (control r)] 'rename-this-file)
+
+; color themes, deftheme style (added in emacs 24).
+(load-theme 'manoj-dark)
+
+
+
+(global-set-key (kbd "M-p") 'move-line-region-up)
+(global-set-key (kbd "M-n") 'move-line-region-down)
+(global-set-key (kbd "M-<up>") 'move-line-region-up)
+(global-set-key (kbd "M-<down>") 'move-line-region-down)
+; (global-set-key (kbd "M-<up>") 'move-line-up)
+; (global-set-key (kbd "M-<down>") 'move-line-down)
+
+; (global-set-key (kbd "M-<up>") 'move-region-up)
+; (global-set-key (kbd "M-<down>") 'move-region-down)
+
+
+(global-set-key [?\C-h] 'delete-backward-char)
+; (global-set-key [?\C-x ?h] 'help-command)    ;; overrides mark-whole-buffer
+
+
+(global-set-key [C-right] 'geosoft-forward-word)
+(global-set-key [C-left] 'geosoft-backward-word) 
+(global-set-key [f4] 'bubble-buffer) 
+		
+
+
+; to make sure case is preserved when expanding
+(setq dabbrev-case-replace nil)		
+
+(global-set-key [S-return]   'open-next-line)
+(global-set-key [C-S-return] 'open-previous-line)
+(global-set-key (kbd "C-o") 'open-next-line)
+(global-set-key (kbd "M-o") 'open-previous-line)
+
+;	
 
 ; ===========
 
@@ -546,51 +591,7 @@
   (add-hook hook (lambda () (set-variable 'show-trailing-whitespace nil))))
 
  
- 
-(defun rename-this-file (new-file-name)
-  "Renames this file and switches the buffer to point to the new file."
-  (interactive "FRename to: ")
-  (let ((orig-buffer (current-buffer)))
-    (rename-file buffer-file-name new-file-name)
-    (find-file new-file-name)
-    (kill-buffer orig-buffer)))
-
-(global-set-key [(control x) (control r)] 'rename-this-file)
-
-; color themes, deftheme style (added in emacs 24).
-(load-theme 'manoj-dark)
-
-
-
-(global-set-key (kbd "M-p") 'move-line-region-up)
-(global-set-key (kbd "M-n") 'move-line-region-down)
-(global-set-key (kbd "M-<up>") 'move-line-region-up)
-(global-set-key (kbd "M-<down>") 'move-line-region-down)
-; (global-set-key (kbd "M-<up>") 'move-line-up)
-; (global-set-key (kbd "M-<down>") 'move-line-down)
-
-; (global-set-key (kbd "M-<up>") 'move-region-up)
-; (global-set-key (kbd "M-<down>") 'move-region-down)
-
-
-(global-set-key [?\C-h] 'delete-backward-char)
-; (global-set-key [?\C-x ?h] 'help-command)    ;; overrides mark-whole-buffer
-
-
-(global-set-key [C-right] 'geosoft-forward-word)
-(global-set-key [C-left] 'geosoft-backward-word) 
-(global-set-key [f4] 'bubble-buffer) 
-		
-
-
-; to make sure case is preserved when expanding
-(setq dabbrev-case-replace nil)		
-
-(global-set-key [S-return]   'open-next-line)
-(global-set-key [C-S-return] 'open-previous-line)
-(global-set-key (kbd "C-o") 'open-next-line)
-(global-set-key (kbd "M-o") 'open-previous-line)
-
+message("loading not installed/untested packages")
 ; go to the last change
 (package-require 'goto-chg)
 (global-set-key [(control .)] 'goto-last-change)
@@ -605,14 +606,6 @@
 ;; Highlight TODO and FIXME in comments 
 (package-require 'fic-ext-mode)
 (add-something-to-mode-hooks '(c++ tcl emacs-lisp python text markdown latex) 'fic-ext-mode)
-(message "cbin")
-
-;; Load up starter kit customizations
-
-; (require 'starter-kit-defuns)
-; (require 'starter-kit-bindings)
-
-(message "cbin")
 
 ; ======
 
@@ -634,6 +627,15 @@
 
 
 
+
+ 
+(defun rename-this-file (new-file-name)
+  "Renames this file and switches the buffer to point to the new file."
+  (interactive "FRename to: ")
+  (let ((orig-buffer (current-buffer)))
+    (rename-file buffer-file-name new-file-name)
+    (find-file new-file-name)
+    (kill-buffer orig-buffer)))
 
 
 
