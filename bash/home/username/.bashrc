@@ -10,12 +10,13 @@ function xpl() {
 	#alias vl='vim $(fc -s)' # will open the output of last command in vi
 	file ="$(fc -s)"
 	ff=$(echo /cygdrive/f/july\ 2/ |  sed -r "s/\\/cygdrive\\/(.)\\//\1:\\\\\\\/" | sed -e "s/\\//\\\\\\\/g" | sed -r "s/(.*)\\\\\\\/\"\1\"/")
-	explorer.exe "$ff"
-	if [ ! -f "$file" ]; then
-		echo "File exist"
-    else
-		echo "File not found!"
-	fi
+	echo "$ff"
+	# explorer.exe "$ff"
+	# if [ ! -f "$file" ]; then
+		# echo "File exist"
+    # else
+		# echo "File not found!"
+	# fi
 }
 
 function myallgrep() { 
@@ -93,23 +94,24 @@ if [ $# -eq 0 -o  -n "$1" ]; then
 
 
 function myindexfolders() { 
-# if [ -z "$1" ]; then
-    # display usage if no parameters given
-    # echo "Usage: cibin index all folders to $Universal_home/Downloads/all_folders.txt"
-	# lfind /cygdrive -type d -iname "*" > "$Universal_home/Downloads/all_folders.txt"
- # fi
+if [ -z "$1" ]; then
+    #display usage if no parameters given
+    echo "Usage: cibin index all folders to $Universal_home/Downloads/all_folders.txt"
+	lfind /cygdrive -type d -iname "*" > "$Universal_home/Downloads/all_folders.txt"
    cat "$Universal_home/Downloads/all_folders.txt" 
    cat "$Universal_home/Downloads/all_folders.txt" | sed -r "s/\\/cygdrive\\/(.)\\//\1:\\\\\\\/" | sed -e "s/\\//\\\\\\\/g"  > "$Universal_home/Downloads/all_folders2.txt"
+fi
  }
 
 
 function myindexemacs() { 
 if [ -z "$1" ]; then
     # display usage if no parameters given
-    echo "Usage: cibin index all files to $Universal_home/Downloads/all_files.txt"
-	echo '(' > "$Universal_home/Downloads/.filecache2"
-	lfind.exe /cygdrive/c/cbn_gits/AHK  -iname "*" -printf '("%P" "%h")'  >> "$Universal_home/Downloads/.filecache2"
-	echo ')' >> "$Universal_home/Downloads/.filecache2"
+    echo "Usage: cibin index all files to $Universal_home/Downloads/.file_cache"
+	echo '(' > "$Universal_home/Downloads/.file_cache"
+#	lfind.exe /cygdrive/c/cbn_gits/AHK/LIB  -iname "*.ahk" -printf '("%P" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$Universal_home/Downloads/.file_cache"
+	lfind  /cygdrive/c/cbn_gits/AHK/LIB/*  $Universal_home/Downloads/* -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -printf '("%f" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$Universal_home/Downloads/.file_cache"
+	echo ')' >> "$Universal_home/Downloads/.file_cache"
 
  fi
  }
