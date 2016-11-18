@@ -1,7 +1,37 @@
 #www.cibinmathew.com
 #github.com/cibinmathew
 
+# initial configuration
 # to make startup faster; http://stackoverflow.com/questions/28410852/startup-is-really-slow-for-all-cygwin-applications
+
+# for case insensitive autocompletion, in  /etc/inputrc or ~/.inputrc uncomment
+# set completion-ignore-case on 
+
+# This makes it unnecessary to press Tab twice when there is more than one match.
+# set show-all-if-ambiguous on
+
+bind "set completion-ignore-case on"
+bind "set show-all-if-ambiguous on"
+bind "TAB: menu-complete"
+bind "set blink-matching-paren on"
+bind "set colored-completion-prefix on"
+bind "set completion-map-case on"
+bind "set mark-directories on"
+# bind "set show-all-if-unmodified on"
+# bind "set show-mode-in-prompt on"
+
+
+
+# C-u=kill till beginning
+# emacs bindings
+# reverse-search-history (C-r)
+              # Search backward starting at the current line and moving `up' through the history as necessary.  This is an incremental search.
+# man bash | grep -A294 'Commands for' 
+# Set Vi Mode in bash:
+# set -o vi 
+
+# Set Emacs Mode in bash:
+# set -o emacs 
 
 source $HOME/lib.sh
 source $HOME/myalias.sh
@@ -18,28 +48,6 @@ function xpl() {
 		# echo "File not found!"
 	# fi
 }
-
-function myallgrep() { 
-	if [ -z "$1" ]; then
-		# display usage if no parameters given
-		echo "Usage: cibin grepp for text files"
-	 else
-	lfind  /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/*  -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -type f -exec grep -PrnIi "$1"  --color=auto {} /dev/null \;
-	# By using /dev/null as an extra input file grep "thinks" it dealing with multiple files, but /dev/null is of course empty, so it will not show up in the match list
-
-	 #grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/* ; 
-	 fi
- }
- 
-function mygrep() { 
-	if [ -z "$1" ]; then
-		# display usage if no parameters given
-		echo "Usage: cibin grepp for text files"
-	 else
-
-	 grep -PrnIi "$1" --color=auto /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts; 
-	 fi
- }
 
 function open() { 
 
@@ -105,13 +113,14 @@ fi
 
 
 function myindexemacs() { 
+file="$Universal_home/AppData/Roaming/.file_cache"
 if [ -z "$1" ]; then
     # display usage if no parameters given
-    echo "Usage: cibin index all files to $Universal_home/Downloads/.file_cache"
-	echo '(' > "$Universal_home/Downloads/.file_cache"
-#	lfind.exe /cygdrive/c/cbn_gits/AHK/LIB  -iname "*.ahk" -printf '("%P" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$Universal_home/Downloads/.file_cache"
-	lfind  /cygdrive/c/cbn_gits/AHK/LIB/*  $Universal_home/Downloads/* -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -printf '("%f" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$Universal_home/Downloads/.file_cache"
-	echo ')' >> "$Universal_home/Downloads/.file_cache"
+    echo "Usage: cibin index all files to $file"
+	echo '(' > "$file"
+#	lfind.exe /cygdrive/c/cbn_gits/AHK/LIB  -iname "*.ahk" -printf '("%P" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$file"
+	lfind  /cygdrive/c/cbn_gits/AHK/*  $Universal_home/Downloads/* -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -printf '("%f" "%h")\n'  | sed -r "s/\\/cygdrive\\/(.)\\//\1:\//" | tr -d '\n' >> "$file"
+	echo ')' >> "$file"
 
  fi
  }
