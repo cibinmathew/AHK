@@ -1,6 +1,6 @@
 # create files from csv list 
 
-files="pcfind,rgrep,findhere"
+files="pcfind,rgrep,findhere,myallgrep,mygrep,advgrep"
 
 while [ "$files" ] ; do
 	iter=${files%%,*}
