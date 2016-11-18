@@ -133,7 +133,7 @@
 								   :size 15
 								   :weight normal
 								   :width normal
-								   :powerline-scale 1.1)
+								   :powerline-scale 1)
 		;; The leader key
 		dotspacemacs-leader-key "SPC"
 		;; The leader key accessible in `emacs state' and `insert state'
@@ -365,17 +365,22 @@
 (setq mouse-drag-copy-region nil)
 (setq x-select-enable-primary nil)
 (setq visible-bell 1)
-(cd "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\others\\el-qrencode-master")
-(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\others\\el-qrencode-master\\load.el")
-; (load-file "~/.emacs.d/config/personal-configs/filecache.el")
+
+; Shift click to extend marked region
+(define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
+
+(cd (format "C://Users//%s//AppData//Roaming//.emacs.d//config//others//el-qrencode-master" user-login-name))
+(load-file "~/.emacs.d/config/others/el-qrencode-master/load.el")
+
 
 ;; Load up starter kit customizations
 
 ; (require 'starter-kit-defuns)
 ; (require 'starter-kit-bindings)
 
-(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\personal-configs\\starter-kit-bindings.el")
-(load-file "C:\\Users\\cibin\\AppData\\Roaming\\.emacs.d\\config\\personal-configs\\filecache.el")
+
+(load-file "~/.emacs.d/config/personal-configs/starter-kit-bindings.el")
+(load-file "~/.emacs.d/config/personal-configs/filecache.el")
 (file-cache-read-cache-from-file)
 
 (electric-pair-mode 1) ; automatically insert right brackets when left one is typed?
@@ -464,18 +469,25 @@
 (global-set-key [?\C-h] 'delete-backward-char)
 ; (global-set-key [?\C-x ?h] 'help-command)    ;; overrides mark-whole-buffer
 
+; kill the current visible buffer without confirmation unless the buffer has been modified. In this last case, you have to answer y/n.
+
+(global-set-key [(control x) (k)] 'kill-this-buffer)
+
 
 (global-set-key [C-right] 'geosoft-forward-word)
 (global-set-key [C-left] 'geosoft-backward-word) 
 (global-set-key [f4] 'bubble-buffer) 
 		
-
+; kill the same line even if at the end of line
+(global-set-key (kbd "C-k") 'kill-whole-line)
 
 ; to make sure case is preserved when expanding
 (setq dabbrev-case-replace nil)		
 
 (global-set-key [S-return]   'open-next-line)
 (global-set-key [C-S-return] 'open-previous-line)
+(global-set-key [M-return] 'open-previous-line)
+
 (global-set-key (kbd "C-o") 'open-next-line)
 (global-set-key (kbd "M-o") 'open-previous-line)
 
@@ -484,10 +496,10 @@
 ; ===========
 
 ;https://github.com/mcandre/dotfiles/blob/master/.emacs
-;; Open project file by fuzzy name
+;; Open project file by fuzzy name C-]
 
 (use-package fiplr
-  :bind ("C-p" . fiplr-find-file)
+  :bind ("C-]" . fiplr-find-file)
   :defines fipl-ignored-globs
   :config
   (setq fiplr-ignored-globs
@@ -571,13 +583,9 @@
 (setq frame-title-format '(buffer-file-name "Emacs: %b (%f)" "Emacs: %b"))
 
 
-
-;; from ; https://snarfed.org/dotfiles/.emacs
 ;; C-8 for *scratch*, C-9 for *compilation*.
 ;; (use M-8, etc as alternates since C-number keys don't have ascii control
 ;; codes, so they can't be used in terminal frames.)
-(defun switch-to-scratch ()
-  (interactive) (bury-then-switch-to-buffer "*scratch*"))
 (global-set-key [(control \8)] 'switch-to-scratch)
 (global-set-key [(control x) (\8)] 'switch-to-scratch)
 (global-set-key [(meta \8)] 'switch-to-scratch)
@@ -591,7 +599,7 @@
   (add-hook hook (lambda () (set-variable 'show-trailing-whitespace nil))))
 
  
-message("loading not installed/untested packages")
+(message "loading not installed/untested packages")
 ; go to the last change
 (package-require 'goto-chg)
 (global-set-key [(control .)] 'goto-last-change)
@@ -620,13 +628,31 @@ message("loading not installed/untested packages")
   (global-nlinum-mode))
   
 ; extra major modes!
-(require 'markdown-mode)
+; (require 'markdown-mode)
 
 
+(message "end of user-config()")
 ) ; end of user-config()
 
+(defun kill-whole-line nil
+  "http://everything2.com/title/useful+emacs+lisp+functions
+kills the entire line on which the cursor is located, and places the
+cursor as close to its previous position as possible."
+  (interactive)
+  (progn
+    (let ((y (current-column))
+  (a (progn (beginning-of-line) (point)))
+  (b (progn (forward-line 1) (point))))
+      (kill-region a b)
+      (move-to-column y))))
+	  
 
+;; from ; https://snarfed.org/dotfiles/.emacs
 
+(defun switch-to-scratch ()
+  (interactive) (bury-then-switch-to-buffer "*scratch*"))
+  
+  
 
  
 (defun rename-this-file (new-file-name)
@@ -951,17 +977,25 @@ URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
 
 
 (setq -path (replace-regexp-in-string "/cygdrive/\\(.\\)" "\\1:" -path))
-		(if (file-exists-p -path)
+		
+		(message "path without /cygdrive is")
+			(message -path)
+			(if (file-exists-p -path)
                 (find-file -path)
       (progn ; not starting “http://”
 	  
-        (if (string-match "^\\`\\([^:]+?\\):\\([0-9]*\\)\\(.*\\)\\'" -path)
+	  ; input is like C:/abc/adsf/.../adfa.txt:343
+	  ; skip the first colon if it is the second character
+        (if (string-match "^\\`\\(..[^:]+?\\):\\([0-9]*\\)\\(.*\\)\\'" -path)
             (progn
               (let (
                     (-fpath (match-string 1 -path))
                     (-line-num (string-to-number (match-string 2 -path))))
-					(message "fpath is")
+					(message "line no present\nfpath is")
 					(message -fpath)
+					(message "line is ")
+					
+					(message (number-to-string -line-num))
                 (if (file-exists-p -fpath)
                     (progn
                       (find-file -fpath)
@@ -972,7 +1006,7 @@ URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
                       (find-file -fpath))))))
           (progn
 		  
-			(message "pathhh is")
+			(message "No line # pathhh is")
 			(message -path)
             (if (file-exists-p -path)
                 (find-file -path)
