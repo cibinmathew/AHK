@@ -1,3 +1,4 @@
+; https://sriramkswamy.github.io/dotemacs/
 ; http://www.wilkesley.org/~ian/xah/emacs/elisp_next_prev_user_buffer.html
 ; http://www.wilkesley.org/~ian/xah/emacs/emacs_stop_cursor_enter_prompt.html
 
@@ -13,10 +14,16 @@
 ; https://github.com/thunderboltsid/vim-configuration/blob/master/vimrc
 ; https://github.com/magnars/.emacs.d
 
+
+; thanks
+; https://sriramkswamy.github.io/dotemacs/
+; http://aaronbedra.com/emacs.d/
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
-(setq-default dotspacemacs-configuration-layers '(themes-megapack))
+(setq-default dotspacemacs-configuration-layers '(
+                                                  autohotkey
+                                                  autohotkeythemes-megapack))
 
 ( defun dotspacemacs/layers ()
 		"Configuration Layers declaration.
@@ -294,12 +301,12 @@
 		  (global-linum-mode) ; Show line numbers by default
 		  (setq custom-enabled-themes '(whiteboard))
 		  (setq cursor-type '(bar . 4))
-		
-		
-
+; set to t for debug trace		
+(setq debug-on-error t)		
+(message "user-config")
 (recentf-mode 1) ; keep a list of recently opened files
 (setq initial-major-mode (quote text-mode)) ; default mode
-(defalias 'list-buffers 'ibuffer) ; always use ibuffer
+(defalias 'list-buffers 'ibuffer) ; always use ibuffer,  (a replacement for the default buffer-list).
 ;; make frequently used commands short
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'lml 'list-matching-lines)
@@ -382,6 +389,7 @@
 (load-file "~/.emacs.d/config/personal-configs/starter-kit-bindings.el")
 (load-file "~/.emacs.d/config/personal-configs/filecache.el")
 (file-cache-read-cache-from-file)
+(message "checkpoint 67")	
 
 (electric-pair-mode 1) ; automatically insert right brackets when left one is typed?
 (show-paren-mode 1) ; turn on bracket match highlight
@@ -417,7 +425,6 @@
         ;; more here
         ) )
 
-		
 (menu-bar-mode -1)
 (when (display-graphic-p)
 	(tool-bar-mode -1)
@@ -427,8 +434,10 @@
 (set-face-attribute 'vertical-border nil :foreground (face-attribute 'fringe :background))
 (setq inhibit-startup-message t)
 (setq inhibit-splash-screen t)
+(setq  initial-major-mode 'org-mode)
 (setq initial-scratch-message nil)
 (setq initial-buffer-choice "~/")
+(setq x-select-enable-clipboard t)
 
 (setq scroll-step            1
       scroll-conservatively  10000)
@@ -449,10 +458,6 @@
 		
 
 (global-set-key [(control x) (control r)] 'rename-this-file)
-
-; color themes, deftheme style (added in emacs 24).
-(load-theme 'manoj-dark)
-
 
 
 (global-set-key (kbd "M-p") 'move-line-region-up)
@@ -490,6 +495,9 @@
 
 (global-set-key (kbd "C-o") 'open-next-line)
 (global-set-key (kbd "M-o") 'open-previous-line)
+
+(global-set-key (kbd "C-a") 'smart-line-beginning)
+(global-set-key [home] 'smart-line-beginning)
 
 ;	
 
@@ -598,8 +606,141 @@
 (dolist (hook '(shell-mode-hook compilation-mode-hook diff-mode-hook))
   (add-hook hook (lambda () (set-variable 'show-trailing-whitespace nil))))
 
+;;; esc quits
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+; Map escape to cancel (like C-g)...
+(define-key isearch-mode-map [escape] 'isearch-abort)   ;; isearch
+(define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
+(global-set-key [escape] 'keyboard-escape-quit)         ;; everywhere else
+
+; move to first letter of next word
+(global-set-key (kbd "M-f") 'forward-word-to-beginning)
+(global-set-key (kbd "C-c d") 'duplicate-line-or-region)
+(global-set-key (kbd "<backspace>") 'delete-backward-char)
+(global-set-key (kbd "<BS>") 'delete-backward-char)
+
+
+; delete till non whitespace
+(global-set-key (kbd "<M-Spc>") 'fixup-whitespace)
+(global-set-key (kbd "C-M-d") 'fixup-whitespace)
+
+(global-set-key (kbd "M-J") 'pull-next-line)
+(global-set-key (kbd "C-z") 'undo)
+
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+; Scroll smoothly rather than by paging
+
+(setq scroll-step 1)
+; When the cursor moves past the top or bottom of the window, scroll one line at a time rather than jumping. I don't like having to find my place in the file again.
+(setq scroll-conservatively 10000)
+
+ ; whitespace mode configured to show lines longer than 120 characters.
+(setq whitespace-line-column 120) 
+
+; https://pawelbx.github.io/emacs-theme-gallery/
+; color themes, deftheme style (added in emacs 24).
+; M-x package-install monokai-theme
+(load-theme 'monokai)
+
+
+(setq echo-keystrokes 0.1
+      use-dialog-box nil
+      visible-bell t)
+; load menu-bar+
+; (eval-after-load "menu-bar" '(require 'menu-bar+))
+; ======
+
+; flyspell
+
+; The built-in Emacs spell checker. Turn off the welcome flag because it is annoying and breaks on quite a few systems. Specify the location of the spell check program so it loads properly.
+
+(setq flyspell-issue-welcome-flag nil)
+(if (eq system-type 'darwin)
+    (setq-default ispell-program-name "/usr/local/bin/aspell")
+  (setq-default ispell-program-name "/usr/bin/aspell"))
+(setq-default ispell-list-command "list")
+
+
+
+ 
+ 
+ 
  
 (message "loading not installed/untested packages")
+
+
+; smex is an amazing program that helps order the M-x commands based on usage and recent items. Let’s install it.
+
+(use-package smex
+  :ensure t
+  :config
+  (smex-initialize))
+
+(message "checkpoint 41")
+
+; Beacon is just a tiny utility that indicates the cursor position when the cursor moves suddenly. You can also manually invoke it by calling the function beacon-blink and it is bound by default.
+
+(use-package beacon
+  :ensure t
+  :demand t
+  :diminish beacon-mode
+  :bind* (("M-m g z" . beacon-blink))
+  :config
+  (beacon-mode 1))
+
+
+(use-package avy
+  :ensure t
+  :init
+  (setq avy-keys-alist
+        `((avy-goto-char-timer . (?j ?k ?l ?f ?s ?d ?e ?r ?u ?i))
+          (avy-goto-line . (?j ?k ?l ?f ?s ?d ?e ?r ?u ?i))))
+  (setq avy-style 'pre)
+  :bind* (("M-m f" . avy-goto-char-timer)
+          ("M-m F" . avy-goto-line)))
+
+		  
+;; Fast line numbers
+(use-package nlinum
+  :config
+  ;; Line number gutter in ncurses mode
+  (unless window-system
+    (setq nlinum-format "%d "))
+  ;; :idle
+  (global-nlinum-mode))
+  
+(message "checkpoint 63")
+; extra major modes!
+;(require 'markdown-mode)
+
+; Enable Markdown mode and setup additional file extensions. Use pandoc to generate HTML previews from within the mode, and use a custom css file to make it a little prettier.
+
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (visual-line-mode t)
+            (writegood-mode t)
+            (flyspell-mode t)))
+(setq markdown-command "pandoc --smart -f markdown -t html")
+(setq markdown-css-paths `(,(expand-file-name "markdown.css" abedra/vendor-dir)))
+
+(message "checkpoint 61")
+
+
+
+(message "checkpoint 44")
+; Shrink white space
+; This package helps to reduce the number of blank lines/whitespace between words easily. Useful when deleting chunks of text and just want to make it neat.
+
 ; go to the last change
 (package-require 'goto-chg)
 (global-set-key [(control .)] 'goto-last-change)
@@ -611,29 +752,297 @@
 ; ensure that even in worst case some goto-last-change is available
 (global-set-key [(control meta .)] 'goto-last-change)
 
+(message "checkpoint 66")
+
+
+(use-package shrink-whitespace
+  :ensure t
+  :bind* (("M-m g SPC" . shrink-whitespace)))
+
+
+; highlight git changes in buffers in a git repository:
+
+(use-package git-gutter+
+  :config
+  (global-git-gutter+-mode)
+)
+
+
 ;; Highlight TODO and FIXME in comments 
 (package-require 'fic-ext-mode)
 (add-something-to-mode-hooks '(c++ tcl emacs-lisp python text markdown latex) 'fic-ext-mode)
-
-; ======
-
-
-;; Fast line numbers
-(use-package nlinum
-  :config
-  ;; Line number gutter in ncurses mode
-  (unless window-system
-    (setq nlinum-format "%d "))
-  ;; :idle
-  (global-nlinum-mode))
-  
-; extra major modes!
-; (require 'markdown-mode)
 
 
 (message "end of user-config()")
 ) ; end of user-config()
 
+
+
+
+
+; (defvar cibin/packages '(flycheck                          
+                          ; markdown-mode
+                          ; )
+  ; "Default packages")
+; Install default packages, When Emacs boots, check to make sure all of the packages defined in cibin/packages are installed. If not, have ELPA take care of it.
+
+; (defun cibin/packages-installed-p ()
+  ; (loop for pkg in cibin/packages
+        ; when (not (package-installed-p pkg)) do (return nil)
+        ; finally (return t)))
+
+; (unless (cibin/packages-installed-p)
+  ; (message "%s" "Refreshing package database...")
+  ; (package-refresh-contents)
+  ; (dolist (pkg cibin/packages)
+    ; (when (not (package-installed-p pkg))
+      ; (package-install pkg))))
+
+; https://github.com/bbatsov/crux/blob/master/crux.el
+(defun crux-open-with (arg)
+  "Open visited file in default external program.
+When in dired mode, open file under the cursor.
+
+With a prefix ARG always prompt for command to use."
+  (interactive "P")
+  (let* ((current-file-name
+          (if (eq major-mode 'dired-mode)
+              (dired-get-file-for-visit)
+            buffer-file-name))
+         (open (pcase system-type
+                 (`darwin "open")
+                 ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+         (program (if (or arg (not open))
+                      (read-shell-command "Open current file with: ")
+                    open)))
+    (start-process "crux-open-with-process" nil program current-file-name)))
+
+(defun crux-duplicate-and-comment-current-line-or-region (arg)
+  "Duplicates and comments the current line or region ARG times.
+   If there's no region, the current line will be duplicated.  However, if
+   there's a region, all lines that region covers will be duplicated."
+  (interactive "p")
+  (pcase-let* ((origin (point))
+               (`(,beg . ,end) (crux-get-positions-of-line-or-region))
+               (region (buffer-substring-no-properties beg end)))
+    (comment-or-uncomment-region beg end)
+    (setq end (line-end-position))
+    (dotimes (_ arg)
+      (goto-char end)
+      (newline)
+      (insert region)
+      (setq end (point)))
+    (goto-char (+ origin (* (length region) arg) arg))))
+
+
+
+(defun crux-recentf-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+    ;(directory-files "C:/cbn_gits/AHK/calendar")
+  (set newlist '(append (directory-files "C:/cbn_gits/AHK/calendar") 'recentf-list))
+  
+  (let ((file (completing-read "Choose recent file: "
+                               (mapcar #'abbreviate-file-name newlist)
+                               nil t)))
+    (when file
+      (find-file file))))
+
+(defun forward-word-to-beginning (&optional n)
+  "Move point forward n words and place cursor at the beginning of the word rather than at the end of a word."
+  (interactive "p")
+  (let (myword)
+    (setq myword
+      (if (and transient-mark-mode mark-active)
+        (buffer-substring-no-properties (region-beginning) (region-end))
+        (thing-at-point 'symbol)))
+    (if (not (eq myword nil))
+      (forward-word n))
+    (forward-word n)
+    (backward-word n)))
+
+
+; search all buffers
+(require 'cl)
+(defcustom search-all-buffers-ignored-files (list (rx-to-string '(and bos (or ".bash_history" "TAGS") eos)))
+  "Files to ignore when searching buffers via \\[search-all-buffers]."
+  :type 'editable-list)
+
+(require 'grep)
+(defun search-all-buffers (regexp prefix)
+  "Searches file-visiting buffers for occurence of REGEXP.  With
+prefix > 1 (i.e., if you type C-u \\[search-all-buffers]),
+searches all buffers."
+  (interactive (list (grep-read-regexp)
+                     current-prefix-arg))
+  (message "Regexp is %s; prefix is %s" regexp prefix)
+  (multi-occur
+   (if (member prefix '(4 (4)))
+       (buffer-list)
+     (remove-if
+      (lambda (b) (some (lambda (rx) (string-match rx  (file-name-nondirectory (buffer-file-name b)))) search-all-buffers-ignored-files))
+      (remove-if-not 'buffer-file-name (buffer-list))))
+
+   regexp))
+
+(defun duplicate-line-or-region (&optional n)
+  "Duplicate current line, or region if active.
+With argument N, make N copies.
+With negative N, comment out original line and use the absolute value."
+  (interactive "*p")
+  (let ((use-region (use-region-p)))
+    (save-excursion
+      (let ((text (if use-region        ;Get region if active, otherwise line
+                      (buffer-substring (region-beginning) (region-end))
+                    (prog1 (thing-at-point 'line)
+                      (end-of-line)
+                      (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
+                          (newline))))))
+        (dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
+          (insert text))))
+    (if use-region nil                  ;Only if we're working with a line (not a region)
+      (let ((pos (- (point) (line-beginning-position)))) ;Save column
+        (if (> 0 n)                             ;Comment out original with negative arg
+            (comment-region (line-beginning-position) (line-end-position)))
+        (forward-line 1)
+        (forward-char pos)))))
+		
+; remove this func
+; duplicate current line 
+(defun duplicate-line (arg)
+  "Duplicate current line, leaving point in lower line."
+  (interactive "*p")
+
+  ;; save the point for undo
+  (setq buffer-undo-list (cons (point) buffer-undo-list))
+
+  ;; local variables for start and end of line
+  (let ((bol (save-excursion (beginning-of-line) (point)))
+        eol)
+    (save-excursion
+
+      ;; don't use forward-line for this, because you would have
+      ;; to check whether you are at the end of the buffer
+      (end-of-line)
+      (setq eol (point))
+
+      ;; store the line and disable the recording of undo information
+      (let ((line (buffer-substring bol eol))
+            (buffer-undo-list t)
+            (count arg))
+        ;; insert the line arg times
+        (while (> count 0)
+          (newline)         ;; because there is no newline in 'line'
+          (insert line)
+          (setq count (1- count)))
+        )
+
+      ;; create the undo information
+      (setq buffer-undo-list (cons (cons eol (point)) buffer-undo-list)))
+    ) ; end-of-let
+
+  ;; put the point in the lowest line and return
+  (next-line arg))
+  
+  
+(defun smart-line-beginning ()
+  "Move point to the beginning of text on the current line; if that is already
+the current position of point, then move it to the beginning of the line."
+  (interactive)
+  (let ((pt (point)))
+    (beginning-of-line-text)
+    (when (eq pt (point))
+      (beginning-of-line))))
+
+
+	  
+(defun pull-next-line() 
+"pull the next line onto the end of the current line, compressing whitespace."
+  (interactive) 
+  (move-end-of-line 1) 
+  (kill-line)
+  (just-one-space))
+
+
+(defun toolbar-button ()
+ "another nonce menu function"
+ (interactive)
+ (message "hotel, motel, holiday inn"))
+
+    (tool-bar-add-item "spell" 'toolbar-button               'toolbar-button
+               :help   "Run fonction toolbar-button")
+			   
+			   
+			   
+(defun minibuffer-keyboard-quit ()
+  "http://stackoverflow.com/a/10166400 
+  Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+; http://pragmaticemacs.com/emacs/aligning-text/
+(defun bjm/align-whitespace (start end)
+  "Align columns by whitespace"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)\\s-" 1 0 t))
+
+(defun bjm/align-& (start end)
+  "Align columns by ampersand"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)&" 1 1 t))
+
+;; Align command !!!
+
+;; from http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
+;; another information: https://gist.github.com/700416
+;; use rx function http://www.emacswiki.org/emacs/rx
+
+
+(defun align-to-colon (begin end)
+  "Align region to colon (:) signs"
+  (interactive "r")
+  (align-regexp begin end
+                (rx (group (zero-or-more (syntax whitespace))) ":") 1 1 ))
+
+(defun align-to-comma (begin end)
+  "Align region to comma  signs"
+  (interactive "r")
+  (align-regexp begin end
+                (rx "," (group (zero-or-more (syntax whitespace))) ) 1 1 ))
+
+
+(defun align-to-equals (begin end)
+  "Align region to equal signs"
+  (interactive "r")
+  (align-regexp begin end
+                (rx (group (zero-or-more (syntax whitespace))) "=") 1 1 ))
+
+(defun align-to-hash (begin end)
+  "Align region to hash ( => ) signs"
+  (interactive "r")
+  (align-regexp begin end
+                (rx (group (zero-or-more (syntax whitespace))) "=>") 1 1 ))
+
+;; work with this
+(defun align-to-comma-before (begin end)
+  "Align region to equal signs"
+  (interactive "r")
+  (align-regexp begin end
+                (rx (group (zero-or-more (syntax whitespace))) ",") 1 1 ))
+				
+				
 (defun kill-whole-line nil
   "http://everything2.com/title/useful+emacs+lisp+functions
 kills the entire line on which the cursor is located, and places the
@@ -1164,19 +1573,20 @@ URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
  '(comint-completion-addsuffix t)
  '(comint-completion-autolist t)
  '(comint-input-ignoredups t)
+ '(comint-move-point-for-output t)
  '(comint-scroll-show-maximum-output t)
  '(comint-scroll-to-bottom-on-input t)
- '(comint-scroll-to-bottom-on-output t)
  '(cursor-type (quote (hbar . 4)))
  '(custom-enabled-themes (quote (whiteboard)))
  '(custom-safe-themes
    (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("f81a9aabc6a70441e4a742dfd6d10b2bae1088830dc7aba9c9922f4b1bd2ba50" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+ '(evil-want-Y-yank-to-eol t)
  '(hybrid-mode t)
  '(line-spacing 0.2)
  '(package-selected-packages
    (quote
-    (s powerline hydra spinner parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil cygwin-mount persp-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline solarized-theme smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (menu-bar+ s powerline hydra spinner parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight pos-tip company yasnippet packed dash helm avy helm-core async auto-complete popup package-build bind-key bind-map evil cygwin-mount persp-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline solarized-theme smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word company-statistics company-quickhelp clean-aindent-mode buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -1185,4 +1595,4 @@ URL `http://ergoemacs.org/emacs/emacs_open_file_path_fast.html'"
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
-'(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
+ '(mode-line ((t (:background "SpringGreen4" :foreground "#ffffff" :box (:line-width 1 :color "#5d4d7a"))))))
