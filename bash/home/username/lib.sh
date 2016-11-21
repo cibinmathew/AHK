@@ -143,9 +143,13 @@ else
 		search_term="$1"
 	else
 		case "$1" in
-			 "all"                 ) files="$Universal_home/Desktop/l* $Universal_home/Downloads/de*";;
+        "a"|"all"                 ) files="$Universal_home/Desktop/l* $Universal_home/Downloads/de*";;
+        "d"|"download" ) files="$Universal_home/Downloads/*";;
 			 "ahk"                 ) files="/cygdrive/c/cbn_gits/AHK/*";;
-			 "notes"                 ) files="$Universal_home/Downloads/de*";;
+			 "n"|"notes"                 ) files="$Universal_home/Downloads/de*";;
+       "h"|"here"                ) files="$(pwd)";;
+       "r"|"rhere"  ) files="$(dirname "$(pwd)")"/*;;
+
 			esac
 		if [ -z "$3" ]; then		
 			search_term="$2"
@@ -158,7 +162,7 @@ else
 fi	
 	
 echo 
-# echo $files
+echo $files
 echo $ext
 echo "$search_term"
 search_term=$(make_lookaround_search_term $search_term)
@@ -166,17 +170,17 @@ echo "$search_term"
 	lfind  $files  -iregex $ext -type f -exec grep -PrnIi $search_term --color=auto {} /dev/null \;
 	# lfind  "$Universal_home"/Desktop/l* "$Universal_home"/Downloads/* /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/*  -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -type f -exec grep -PrnIi "$1"  --color=auto {} /dev/null \;
 	
-	 
- }
+a a ddsfd 
 # advgrep marady
 # advgrep all marady
 # advgrep all txt marady
 # advgrep ahk ahk "recently downlo"
 # advgrep ahk "recently downloaded"
 # By using /dev/null as an extra input file grep "thinks" it dealing with multiple files, but /dev/null is of course empty, so it will not show up in the match list
- 
+ }
 function myallgrep() { 
 	if [ -z "$1" ]; then
+ 
 		echo "Usage: cibin grepp for text files"
 	 else
 	lfind  "$Universal_home"/Desktop/l* "$Universal_home"/Downloads/* /cygdrive/f/july\ 2/text/* /cygdrive/f/july\ 2/Projects/python_scripts  /cygdrive/d/*  -iregex ".*\.\(txt\|py\|ini\|java\|ahk\)" -type f -exec grep -PrnIi "$1"  --color=auto {} /dev/null \;

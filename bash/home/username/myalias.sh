@@ -14,6 +14,8 @@ alias fgrep='fgrep --color=auto'
 alias cd..='cd ..' 
  
 ## a quick way to get out of current directory ##
+alias cd.='cd ..' 
+alias cd..='cd ..' 
 alias ..='cd ..' 
 alias ...='cd ../../../' 
 alias ....='cd ../../../../' 
@@ -140,3 +142,7 @@ alias wget='wget -c'
 
 
 
+# alias e='emacsclient -t'
+# alias ec='emacsclient -c'
+# alias vim='emacsclient -t'
+# alias vi='emacsclient -t'
