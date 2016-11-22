@@ -297,10 +297,12 @@
 		This is the place where most of your configurations should be done. Unless it is
 		explicitly specified that a variable should be set before a package is loaded,
 		you should place you code here."
-		  (global-hl-line-mode 1) ; Disable current line highlight
-		  (global-linum-mode) ; Show line numbers by default
-		  (setq custom-enabled-themes '(whiteboard))
-		  (setq cursor-type '(bar . 4))
+(setq load-prefer-newer t)
+(auto-compile-on-load-mode)		  
+(global-hl-line-mode 1) ; Disable current line highlight
+(global-linum-mode) ; Show line numbers by default
+; (setq custom-enabled-themes '(whiteboard))
+(setq cursor-type '(bar . 4))
 ; set to t for debug trace		
 (setq debug-on-error t)		
 (message "user-config")
@@ -648,7 +650,7 @@
 ; https://pawelbx.github.io/emacs-theme-gallery/
 ; color themes, deftheme style (added in emacs 24).
 ; M-x package-install monokai-theme
-(load-theme 'monokai)
+; (load-theme 'monokai)
 
 
 (setq echo-keystrokes 0.1
@@ -687,7 +689,6 @@
 (message "checkpoint 41")
 
 ; Beacon is just a tiny utility that indicates the cursor position when the cursor moves suddenly. You can also manually invoke it by calling the function beacon-blink and it is bound by default.
-
 (use-package beacon
   :ensure t
   :demand t
@@ -707,7 +708,7 @@
   :bind* (("M-m f" . avy-goto-char-timer)
           ("M-m F" . avy-goto-line)))
 
-		  
+"
 ;; Fast line numbers
 (use-package nlinum
   :config
@@ -716,13 +717,12 @@
     (setq nlinum-format "%d "))
   ;; :idle
   (global-nlinum-mode))
-  
-(message "checkpoint 63")
 ; extra major modes!
 ;(require 'markdown-mode)
-
+"
+(message "checkpoint 63")
 ; Enable Markdown mode and setup additional file extensions. Use pandoc to generate HTML previews from within the mode, and use a custom css file to make it a little prettier.
-
+"
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
 (add-hook 'markdown-mode-hook
@@ -732,6 +732,7 @@
             (flyspell-mode t)))
 (setq markdown-command "pandoc --smart -f markdown -t html")
 (setq markdown-css-paths `(,(expand-file-name "markdown.css" abedra/vendor-dir)))
+"  
 
 (message "checkpoint 61")
 
@@ -839,9 +840,10 @@ With a prefix ARG always prompt for command to use."
 (defun crux-recentf-find-file ()
   "Find a recent file using ido."
   (interactive)
-    ;(directory-files "C:/cbn_gits/AHK/calendar")
-  (set newlist '(append (directory-files "C:/cbn_gits/AHK/calendar") 'recentf-list))
+    
+  (setq newlist '(append (directory-files "C:/cbn_gits/AHK/calendar") 'recentf-list))
   
+(message "%s" newlist)
   (let ((file (completing-read "Choose recent file: "
                                (mapcar #'abbreviate-file-name newlist)
                                nil t)))
