@@ -148,7 +148,7 @@ translate_emacsCombo_to_Normal_combo_and_send(HK)
 
 is_in_an_emacs_window()
 {
-	If WinActive("ahk_exe eclipse.exe") Or WinActive("ahk_exe javaw.exe")  Or WinActive("ahk_exe emacs.exe")  Or WinActive("ahk_exe sublime_text.exe") ; Or WinActive("ahk_exe firefox.exe")
+	If WinActive("ahk_exe eclipse.exe") Or WinActive("ahk_exe javaw.exe")  Or WinActive("ahk_exe emacs.exe")  Or WinActive("ahk_exe sublime_text.exe") Or WinActive("ahk_exe idea64.exe") Or WinActive("ahk_exe exlipse.exe") ; Or WinActive("ahk_exe firefox.exe")
 		return true
 	else
 		return false
